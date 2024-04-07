@@ -1,39 +1,22 @@
 const express = require("express");
-const mysql = require("mysql");
 const cors = require("cors");
+const executeQuery = require('./config/conn.js');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const node1 = mysql.createConnection({
-    host: '10.2.0.24',  // e.g., 'localhost'
-    user: 'root',
-    password: 'ap4cAKqdRPfFv5xSg7MuW9mQ',
-    database: 'mco2'
-});
-/*
-const node2 = mysql.createConnection({
-    host: '10.2.0.25',  // e.g., 'localhost'
-    user: 'root',
-    password: 'ap4cAKqdRPfFv5xSg7MuW9mQ',
-    database: 'mco2'
+app.get("/", async (req, res) => {
+    try {
+        // Execute query
+        const results = await executeQuery('SELECT * FROM node2_db LIMIT 5;');
+        res.json(results);
+    } catch (error) {
+        console.error('Error executing query:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-const node3 = mysql.createConnection({
-    host: '10.2.0.26',  // e.g., 'localhost'
-    user: 'root',
-    password: 'ap4cAKqdRPfFv5xSg7MuW9mQ',
-    database: 'mco2'
+app.listen(8800, () => {
+    console.log("Connected to backend");
 });
-*/
-
-app.get("/", (req, res) => {
-    res.json("hello");
-  });
-
-app.get("/profile")
-
-app.listen(8800, ()=>{
-    console.log("Connected to backend")
-})
