@@ -3,6 +3,7 @@ const cors = require("cors");
 const executeQuery = require('./config/conn.js');
 
 const app = express();
+const PORT = 8800;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -67,6 +68,6 @@ app.post("/", async (req, res) => {
     }
 });
 
-app.listen(8800, () => {
-    console.log("Connected to backend");
+app.listen(PORT, () => {
+    console.log("🚀 Server ready at: http://localhost:" + PORT);
 });
