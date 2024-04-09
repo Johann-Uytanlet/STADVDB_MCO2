@@ -10,7 +10,6 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="frontend/public/assets/img/favicon.png" rel="icon">
   <link href="frontend/public/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -63,6 +62,7 @@
                 '<td><input type="text" class="form-control" name="virtual" id="virtual"></td>' +
                 '<td><input type="text" class="form-control" name="major" id="major"></td>' +
                 '<td><input type="text" class="form-control" name="hospitalName" id="hospitalName"></td>' +
+                '<td><input type="text" class="form-control" name="hc" id="hc"></td>' +
           '<td>' + actions + '</td>' +
             '</tr>';
           $("table").append(row);		
@@ -148,21 +148,16 @@
 
           <div class="col-lg-5 col-md-6">
             <div class="about-img" data-aos="fade-right" data-aos-delay="100">
-              <img src="frontend/public/assets/img/about-img.jpg" alt="">
+              <img src="frontend/public/assets/img/pogi.jpg" alt="">
             </div>
           </div>
 
           <div class="col-lg-7 col-md-6">
             <div class="about-content" data-aos="fade-left" data-aos-delay="100">
-              <h2>About Us</h2>
-              <h3>Odio sed id eos et laboriosam consequatur eos earum soluta.</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p>Aut dolor id. Sint aliquam consequatur ex ex labore. Et quis qui dolor nulla dolores neque. Aspernatur consectetur omnis numquam quaerat. Sed fugiat nisi. Officiis veniam molestiae. Et vel ut quidem alias veritatis repudiandae ut fugit. Est ut eligendi aspernatur nulla voluptates veniam iusto vel quisquam. Fugit ut maxime incidunt accusantium totam repellendus eum error. Et repudiandae eum iste qui et ut ab alias.</p>
-              <ul>
-                <li><i class="bi bi-check-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                <li><i class="bi bi-check-circle"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                <li><i class="bi bi-check-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-              </ul>
+              <h2>About the website</h2>
+              <p>The website provides a comprehensive platform for viewing, managing, and updating appointments across hospitals in Luzon, Visayas, and Mindanao. Users can easily access information such as appointment ID, status, time queued, queue date, start and end times, appointment type (virtual or face-to-face), and the major island where the hospital is located. This detailed view allows users to quickly identify their appointments, check for any changes or updates, and plan their schedules accordingly. The website's intuitive interface makes it easy to search for appointments based on specific criteria, such as hospital name or clinic, enabling users to quickly find the information they need.</p>
+              <p>Additionally, the website provides functionality for users to update, delete, and insert new appointments, providing flexibility and control over their schedules. This feature is particularly useful for managing changes in appointments or adding new appointments as needed. With this functionality, users can easily make adjustments to their schedules without the need for additional assistance, streamlining the appointment management process. Overall, the website offers a convenient and efficient way for users to manage their appointments across hospitals in Luzon, Visayas, and Mindanao, enhancing the overall experience of both patients and healthcare providers.</p>
+
             </div>
           </div>
         </div>
@@ -182,24 +177,24 @@
 
           <div class="col-md-6 col-lg-4 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
             <div class="box">
-              <div class="icon" style="background: #fceef3;"><i class="bi bi-briefcase" style="color: #ff689b;"></i></div>
+              <div class="icon" style="background: #fceef3;"><i class="bi bi-plus" style="color: #ff689b;"></i></div>
               <h4 class="title">Add</a></h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+              <p class="description">A user is able to add appointments by pressing the top right button in the appointment details area</p>
             </div>
           </div>
           <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
             <div class="box">
-              <div class="icon" style="background: #fff0da;"><i class="bi bi-card-checklist" style="color: #e98e06;"></i></div>
+              <div class="icon" style="background: #fff0da;"><i class="bi bi-x" style="color: #e98e06;"></i></div>
               <h4 class="title">Delete</a></h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+              <p class="description">A user is able to delete appointments by pressing the trashbin icon that is seen beside the appointment information </p>
             </div>
           </div>
 
           <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="300">
             <div class="box">
-              <div class="icon" style="background: #e6fdfc;"><i class="bi bi-bar-chart" style="color: #3fcdc7;"></i></div>
+              <div class="icon" style="background: #e6fdfc;"><i class="bi bi-check2" style="color: #3fcdc7;"></i></div>
               <h4 class="title">Update</a></h4>
-              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+              <p class="description">A user is able to update appointments by pressing the pencil icon that is seen beside the appointment information and edit the neccessary information</p>
             </div>
           </div>
 
@@ -208,75 +203,109 @@
       </div>
     </section><!-- End features Section -->
 
+    <!--summary report-->
+    
+    <div class="progress-wrapper">
+      <div class="row1">
+        <div class = "rowItem">
+          <div class="progress blue">
+            <span class="progress-left">
+              <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+              <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">90%</div>
+          </div>
+          <div class="progress-text">Progress 1 - Details for Progress 1</div>
+        </div>
+        
+        <div class = "rowItem">
+          <div class="progress yellow">
+            <span class="progress-left">
+              <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+              <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">90%</div>
+          </div>
+          <div class="progress-text">Progress 1 - Details for Progress 1</div>
+        </div>
+    
+        <div class = "rowItem">
+          <div class="progress red-progress">
+            <span class="progress-left">
+              <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+              <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">90%</div>
+          </div>
+          <div class="progress-text">Progress 1 - Details for Progress 1</div>
+        </div>
+      </div>
+    
+      <div class="row2">
+        <div class = "rowItem">
+          <div class="progress purple-progress">
+            <span class="progress-left">
+              <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+              <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">80%</div>
+          </div>
+          <div class="progress-text">Progress 1 - Details for Progress 1</div>
+        </div>
+
+
+        <div class = "rowItem">
+          <div class="progress green-progress">
+            <span class="progress-left">
+              <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+              <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">90%</div>
+          </div>
+          <div class="progress-text">Progress 1 - Details for Progress 1</div>
+        </div>
+      </div>
+    </div>
     
     <!--search form-->
-    <div class="container mt-5" id="formgrey">
-      <h1 style="padding-top: 20px; margin-bottom: 30px;">Search Form</h1>
-      <form>
-        <div class="row">
-          <div class="col">
-            <label for="variable1" class="fw-bold">AppId</label>
-            <input type="text" class="form-control underline" id="variable1" placeholder="">
+    <div class  = "services section-bg">
+      <div class="container mt-5" id="formgrey">
+        <h1 style="padding-top: 20px; ">Search Form</h1>
+        <form>
+          <div class="row">
+            <div class="col">
+              <label for="variable1" class="fw-bold">AppId</label>
+              <input type="text" class="form-control underline" id="variable1" placeholder="">
+            </div>
+
           </div>
-          <div class="col">
-            <label for="variable1" class="fw-bold">Status</label> <!--CONSULTATION/INPATIENT-->
-            <input type="text" class="form-control underline" id="variable1" placeholder="">
+ 
+          <div class="row">
+            <div class="col text-center">
+              <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;">Search</button>
+            </div>
           </div>
-          <div class="col">
-            <label for="variable6" class="fw-bold">Type</label> <!--CONSULTATION/INPATIENT-->
-            <input type="text" class="form-control underline" id="variable6">
-          </div>
-          <div class="col">
-            <label for="variable7" class="fw-bold">Virtual/Face to Face</label>
-            <input type="text" class="form-control underline" id="variable7">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <label for="variable2" class="fw-bold">TimeQueued</label>
-            <input type="time" class="form-control underline" id="variable2" placeholder="Variable 2">
-          </div>
-          <div class="col">
-            <label for="variable3" class="fw-bold">QueueDate</label>
-            <input type="date" class="form-control underline" id="variable3" placeholder="Variable 3">
-          </div>
-          <div class="col">
-            <label for="variable4" class="fw-bold"> StartTime</label>
-            <input type="time" class="form-control underline" id="variable4" placeholder="Variable 4">
-          </div>
-          <div class="col">
-            <label for="variable5" class="fw-bold">EndTime</label>
-            <input type="time" class="form-control underline" id="variable5" placeholder="Variable 5">
-          </div>
-         
-        </div>
-        <div class="row">
-          <div class="col">
-            <label for="variable10" class="fw-bold">Clinic/Hospital</label>
-            <input type="text" class="form-control underline" id="variable10" placeholder="Variable 10">
-          </div>
-          <div class="col">
-            <label for="variable8" class="fw-bold">Major Island</label>
-            <input type="text" class="form-control underline" id="variable8">
-          </div>
-          <div class="col">
-            <label for="variable9" class="fw-bold">Hospital name</label>
-            <input type="text" class="form-control underline" id="variable9">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col text-center">
-            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;">Search</button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
+
     </div>
+    
     <!-- table -->
 
   
-    <div class="container-lg">
-      <div class="table-wrapper">
-          <div class="table-title">
+    <div class="table">
+      <div class="table-wrapper" style=" padding-top: 20px; padding-left: 10px; padding-right: 10px; border-radius: 5px;">
+          <div class="table-title ">
               <div class="row">
                   <div class="col-sm-8"class="form-control underline"><h2>Appointment <b>Details</b></h2></div>
                   <div class="col-sm-4">
@@ -284,7 +313,7 @@
                   </div>
               </div>
           </div>
-          <table class="table table-bordered">
+          <table class="table table-bordered padding-top: 20px;">
               <thead>
                   <tr>
                       <th>apid</th>
@@ -378,7 +407,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="section-bg">
+  <footer id="footer" class="services section-bg">
     <div class="container">
       <div class="copyright">
         &copy; Copyright <strong>Pogi ko</strong>. All Rights Reserved
