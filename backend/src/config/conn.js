@@ -111,9 +111,10 @@ async function dbQuery(pool, query, content, callback) {
 
         // Call storeQuery with pool, query, and content
         // to store the query in the logs. Ignores read-only queries
+        /*
         let query_type = query.split(" ")[0];
         if (process.env.NODE_NUM_CONFIGURATION != -1 && query_type != "SELECT")
-            await storeQuery(pool, query, content);
+            await storeQuery(pool, query, content);*/
 
         callback(err);
 
@@ -127,7 +128,29 @@ async function dbQuery(pool, query, content, callback) {
     }
 }
 
+function searchNodeDB(apptid, content, callback){
+    const sql = `
+    SELECT *
+    FROM node0_db
+    WHERE apptid = '${apptid}';
+    `
 
 
+
+    dbQuery(node_0, sql, content, callback);
+    /*
+    const results = connection.query(sql, function (error, results, fields) {
+        if (error) throw error;
+        console.log('The search results for apptid', apptid, 'are:', results);
+      });*/
+    
+      //return results;
+
+    }
+
+    var content, callback;
+
+    searchNodeDB('000019E8D2903D7A8D69B782507287E7', content, callback);
+    
 
 
