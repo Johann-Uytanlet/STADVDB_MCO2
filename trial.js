@@ -19,36 +19,60 @@ const connection = mysql.createConnection({
     database: 'mco2'
 }); 
 
+async function main() {
+    /*
+    try {
+        // Connect to MySQL
+        await connection.connect();
 
-// Connect to MySQL
-connection.connect();
+        // Example usage:
+        const newData = {
+            status: "Completed",
+            TimeQueued: new Date(),
+            QueueDate: new Date("2024-04-09T10:00:00"),
+            StartTime: new Date("2024-04-09T11:00:00"),
+            EndTime: new Date("2024-04-09T12:00:00"),
+            type: "Consultations",
+            IsVirtual: 0,
+            MajorIsland: "Some Island",
+            hospitalname: "Some Hospital",
+            IsHospital: 1
+        };
 
-// Perform database query
-/*
-connection.query('SELECT * FROM node0_db LIMIT 100;', function (error, results, fields) {
-    if (error) throw error;
-    console.log('The result is: ', results);
-});*/
+        await insertNodeDB(newData);
+        console.log('Insertion successful.');
 
-// searchNodeDB(2);
-console.log(searchNodeDB('000019E8D2903D7A8D69B782507287E7'))
+        // Perform database query
+        await searchNodeDB('9876543210FEDCBA');
+    } catch (error) {
+        console.error('Error occurred:', error);
+    } finally {
+        // Close MySQL connection
+        connection.end();
+    }*/
 
-const validData = {
-    status: "Completed", // orig is Complete
-    TimeQueued: null,
-    type: "Consultations", // orig is Consultation
-    IsVirtual: 0
-  };
+    await connection.connect();
 
 
-//updateNodeDB('000019E8D2903D7A8D69B782507287E7', validData)
-  
+    const validData = {
+        status: "Completed", // orig is Complete
+        TimeQueued: null,
+        type: "Consultations", // orig is Consultation
+        IsVirtual: 0,
+        hospitalname: 'Better Hospital'
+      };
+    
+    
+    updateNodeDB('6A0D35175418B71A12B3333597D4FD43', validData)
+
+    connection.end();
 
 
 
 
-// Close MySQL connection
-connection.end();
+}
+
+main();
 
 
 function searchNodeDB(apptid){
@@ -104,7 +128,7 @@ function searchNodeDBPerPage(pageNumber) {
       if (
         Object.values(data).length > 0 &&
         !key.includes(" ") &&
-        ["status", "TimeQueued", "QueueDate", "StartTime", "EndTime", "type", "IsVirtual"].includes(key)
+        ["status", "TimeQueued", "QueueDate", "StartTime", "EndTime", "type", "IsVirtual", "hospitalname", "IsHospital"].includes(key)
       ) {
         // Enclose string values in single quotes for proper escaping and apostrophe handling
         if (typeof data[key] === "string") {
@@ -152,4 +176,116 @@ function searchNodeDBPerPage(pageNumber) {
   }
   
   
+  function generateRandomHexString(length) {
+    const characters = '0123456789ABCDEF';
+    let result = '';
+    const charactersLength = characters.length;
   
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+  
+    return result;
+  }
+  
+  function generateHexStringApptid() {
+    return generateRandomHexString(32);
+}
+
+async function isApptidUnique(apptid) {
+    const sql = `
+        SELECT COUNT(*) AS count
+        FROM node0_db
+        WHERE apptid = ?;
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(sql, [apptid], (error, results, fields) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results[0].count === 0);
+            }
+        });
+    });
+}
+  async function insertNodeDB(data) {
+    // Extract data from the input object
+    const {
+        status,
+        TimeQueued,
+        QueueDate,
+        StartTime,
+        EndTime,
+        type,
+        IsVirtual,
+        MajorIsland,
+        hospitalname,
+        IsHospital
+    } = data;
+
+    let apptid;
+    let unique = false;
+
+    // Generate a unique apptid
+    while (!unique) {
+        apptid = generateHexStringApptid();
+        unique = await isApptidUnique(apptid);
+    }
+
+    // Convert Date objects to the desired format
+    const formatDateTime = (datetime) => {
+        if (datetime instanceof Date) {
+            const year = datetime.getFullYear();
+            const month = String(datetime.getMonth() + 1).padStart(2, '0');
+            const day = String(datetime.getDate()).padStart(2, '0');
+            const hours = String(datetime.getHours()).padStart(2, '0');
+            const minutes = String(datetime.getMinutes()).padStart(2, '0');
+            const seconds = String(datetime.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        } else {
+            return datetime;
+        }
+    };
+
+    // Format date and time fields
+    const formattedTimeQueued = formatDateTime(TimeQueued);
+    const formattedQueueDate = formatDateTime(QueueDate);
+    const formattedStartTime = formatDateTime(StartTime);
+    const formattedEndTime = formatDateTime(EndTime);
+
+    // Build the SQL query using parameterized queries for security
+    const sql = `
+      INSERT INTO node0_db 
+      (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    // Execute the query using your database connection library (replace with actual code)
+    const values = [
+        apptid,
+        status,
+        formattedTimeQueued,
+        formattedQueueDate,
+        formattedStartTime,
+        formattedEndTime,
+        type,
+        IsVirtual,
+        MajorIsland,
+        hospitalname,
+        IsHospital
+    ];
+
+    return new Promise((resolve, reject) => {
+        connection.query(sql, values, (error, results, fields) => {
+            if (error) {
+                reject(error); // Handle errors appropriately in your application
+            } else {
+                console.log('New row inserted successfully.');
+                resolve(results); // Return results only after successful execution
+            }
+        });
+    });
+}
+
+
