@@ -11,6 +11,10 @@ function isApptidUnique(apptid) {
 };
 
 // TODO: Replace the if-else statements in the (err, result) anonymous functions to respond with the appropriate status codes and data.
+/*
+    TODO: Add/Implement the following functions
+        - searchNodeDBPerPage
+*/
 const controller = {
 
     searchAppointment: (req, res) => {
