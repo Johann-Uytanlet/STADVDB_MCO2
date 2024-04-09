@@ -44,21 +44,40 @@ const connection_VM = mysql.createConnection({
 
 searchNodeDB('000019E8D2903D7A8D69B782507287E7');
 
+data = {
+  type: 'Consultation'
+}
+
+
+updateNodeDB('000019E8D2903D7A8D69B782507287E7', data);
+
+
+searchNodeDB('000019E8D2903D7A8D69B782507287E7');
+
+
 
 
 
 function searchNodeDB(apptid){
     const sql = `
-    START TRANSACTION;
     SELECT *
     FROM node0_db
     WHERE apptid = '${apptid}';
-    COMMIT;
     `
+
+    connection.query('START TRANSACTION;', function (error, results, fields) {
+      if (error) throw error;
+        console.log('ERROR IN START');
+    });
     
     const results = connection.query(sql, function (error, results, fields) {
         if (error) throw error;
         console.log('The search results for apptid', apptid, 'are:', results);
+      });
+
+      connection.query('COMMIT;', function (error, results, fields) {
+        if (error) throw error;
+          console.log('ERROR IN COMMIT');
       });
     
       return results;
