@@ -7,6 +7,13 @@ const controller = require('../controller/controller.js');
 // Add endpoints as necessary
 // e.g router.post('/addAppointment', MasterController.addAppointment);
 
+// GET
+router.get('/getAppointment', controller.searchAppointment);
+
+// POST
+router.post('/addAppointment', controller.addAppointment);
+router.post('/updateAppointment', controller.updateAppointment);
+
 router.get('/', (req, res) => {
     res.render('index');
 });
