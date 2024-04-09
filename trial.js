@@ -1,3 +1,4 @@
+const { type } = require('express/lib/response');
 const mysql = require('mysql2');
 
 // Create MySQL connection
@@ -13,73 +14,46 @@ const connection = mysql.createConnection({
 
 
 const connection = mysql.createConnection({
-    host: 'localhost',  // e.g., 'localhost'
+    host: 'ccscloud.dlsu.edu.ph',  // e.g., 'localhost'
     user: 'root',
-    password: '#S4N4four.O',
-    database: 'mco2'
+    password: 'root',
+    database: 'mco2',
+    port: 20024
 }); 
 
-async function main() {
-    /*
-    try {
-        // Connect to MySQL
-        await connection.connect();
 
-        // Example usage:
-        const newData = {
-            status: "Completed",
-            TimeQueued: new Date(),
-            QueueDate: new Date("2024-04-09T10:00:00"),
-            StartTime: new Date("2024-04-09T11:00:00"),
-            EndTime: new Date("2024-04-09T12:00:00"),
-            type: "Consultations",
-            IsVirtual: 0,
-            MajorIsland: "Some Island",
-            hospitalname: "Some Hospital",
-            IsHospital: 1
-        };
-
-        await insertNodeDB(newData);
-        console.log('Insertion successful.');
-
-        // Perform database query
-        await searchNodeDB('9876543210FEDCBA');
-    } catch (error) {
-        console.error('Error occurred:', error);
-    } finally {
-        // Close MySQL connection
-        connection.end();
-    }*/
-
-    await connection.connect();
+const connection_L = mysql.createConnection({
+  host: 'ccscloud.dlsu.edu.ph',  // e.g., 'localhost'
+  user: 'root',
+  password: 'root',
+  database: 'mco2',
+  port: 20025
+}); 
 
 
-    const validData = {
-        status: "Completed", // orig is Complete
-        TimeQueued: null,
-        type: "Consultations", // orig is Consultation
-        IsVirtual: 0,
-        hospitalname: 'Better Hospital'
-      };
-    
-    
-    updateNodeDB('6A0D35175418B71A12B3333597D4FD43', validData)
+const connection_VM = mysql.createConnection({
+  host: 'ccscloud.dlsu.edu.ph',  // e.g., 'localhost'
+  user: 'root',
+  password: 'root',
+  database: 'mco2',
+  port: 20026
+}); 
 
-    connection.end();
+// 000019E8D2903D7A8D69B782507287E7
+//searchNodeDBPerPage(2);
 
-
+searchNodeDB('000019E8D2903D7A8D69B782507287E7');
 
 
-}
-
-main();
 
 
 function searchNodeDB(apptid){
     const sql = `
+    START TRANSACTION;
     SELECT *
     FROM node0_db
     WHERE apptid = '${apptid}';
+    COMMIT;
     `
     
     const results = connection.query(sql, function (error, results, fields) {
@@ -89,8 +63,7 @@ function searchNodeDB(apptid){
     
       return results;
 
-}
-
+    }
 
 function searchNodeDBPerPage(pageNumber) {
     // Define limit per page (100 in this case)
@@ -105,7 +78,7 @@ function searchNodeDBPerPage(pageNumber) {
       FROM node0_db
       ORDER BY apptid ASC
       LIMIT ${limit}
-      OFFSET ${offset}
+      OFFSET ${offset};
     `;
   
     // Execute the query using your database connection library (specific syntax may vary)
@@ -289,3 +262,18 @@ async function isApptidUnique(apptid) {
 }
 
 
+function deleteNodeDB(apptid){
+    const sql = `
+      DELETE FROM node0_db
+      WHERE apptid = '${apptid}';
+    `;
+    
+    
+    const results = connection.query(sql, function (error, results, fields) {
+        if (error) throw error;
+        console.log('The delete for apptid', apptid, 'is', results);
+      });
+    
+      return results;
+
+}
