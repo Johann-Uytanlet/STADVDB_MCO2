@@ -314,6 +314,7 @@ const controller = {
                 } else {
                     //console.log(result);
                     console.log("Luzon");
+                    return res.status(201).json({ message: "Appointment created", apptid: result.apptid });
                 }
             });
         } else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
@@ -332,10 +333,10 @@ const controller = {
                 } else {
                     //console.log(result);
                     console.log("Visayas/Mindanao");
+                    return res.status(201).json({ message: "Appointment created", apptid: result.apptid });
                 }
             });
         }
-        //res.status(201);
     },
 
     deleteNodeDB: async (req, res) => {
