@@ -10,10 +10,10 @@ async function main(){
 
     // testing search
 
-    await controller.searchAppointment_server2(req, res);
+    //await controller.searchAppointment_server2(req, res);
     //console.log("ASDFsafsdfasdfasdf");
-    console.log(res.result);
-    console.log(res.result[0].length); // if 0 no search, else found
+    //console.log(res.result);
+    //console.log(res.result[0].length); // if 0 no search, else found
     //if()
     //console.log(res.result[0][0]); // HOW TO GET THE OBJECT
     /*
@@ -70,8 +70,28 @@ async function main(){
     try{console.log(res.result[0].affectedRows);}
     catch{console.log("NOOOO");}
     */
-    
 
+
+    /*
+    res = {};
+    req = {};
+    await controller.avg_consultation_time(req, res);
+    console.log("asdf")
+    console.log(res.result[0][0].avg_consultation_time);
+    */
+
+    /*
+    res = {};
+    req = {};
+    await controller.avg_queue_time(req, res);
+    console.log("asdf")
+    console.log(res.result[0][0].avg_queue_time);*/
+
+    res = {};
+    req = {};
+    await controller.completed_over_total(req, res);
+    console.log("asdf")
+    console.log(res.result);
 }
     
 

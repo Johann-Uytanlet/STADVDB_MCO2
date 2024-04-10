@@ -399,6 +399,95 @@ const controller = {
     }
     },
 
+    avg_consultation_time: async (req, res) => {
+        const sql = `
+        SELECT AVG(TIMESTAMPDIFF(SECOND, StartTime, EndTime)) AS avg_consultation_time
+        FROM node0_db;
+        `;
+
+        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+            if (err) {
+                console.log(err);
+                //console.log("inside");
+            } else {
+                console.log(result);
+                //console.log("inside2");
+                res.result = result;
+                //return result;
+            }
+            }
+            );
+    }, avg_queue_time: async (req, res) => {
+        const sql = `
+        SELECT AVG(TIMESTAMPDIFF(SECOND, TimeQueued, QueueDate)) AS avg_queue_time
+        FROM node0_db; 
+        `;
+
+        result = {}
+        result2 = {}
+
+        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+            if (err) {
+                console.log(err);
+                //console.log("inside");
+            } else {
+                console.log(result);
+                //console.log("inside2");
+                res.result = result;
+                //return result;
+            }
+            }
+            );
+    }, completed_over_total: async (req, res) => {
+        var sql = `
+        SELECT COUNT(*) as total
+        FROM node0_db;
+        `;
+        okay = false;
+        okay2 = false;
+
+        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+            if (err) {
+                console.log(err);
+                //console.log("inside");
+            } else {
+                //console.log(result);
+                temp = result
+                okay = true;
+                //console.log("inside2");
+                //res.result = result;
+                //return result;
+            }
+            }
+            );
+             sql = `
+            SELECT COUNT(*) as total
+            FROM node0_db
+            WHERE status = 'Complete';
+            `;
+        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+                if (err) {
+                    console.log(err);
+                    //console.log("inside");
+                } else {
+                    //console.log(result);
+                    temp2 = result
+                    okay2 = true;
+                    //console.log("inside2");
+                    //res.result = result;
+                    //return result;
+                }
+                }
+                );
+        if(okay && okay2){
+            res.result = temp2[0][0].total/temp[0][0].total;
+            res.err = false;
+        } else {
+            res.err = true;
+            res.result = 0
+        }
+    },
+
 };
 
 
