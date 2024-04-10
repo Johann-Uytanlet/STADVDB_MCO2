@@ -26,31 +26,19 @@ const controller = {
 
     homepage: async (req, res) => {
         try {
-            //res.render("index.ejs");
 
-            console.log("sdf")
             // Average Consultation Time
             req1 = {};
             res1 = {}
             await controller.avg_consultation_time(req1, res1);
 
-            //console.log(res1.result[0][0].avg_consultation_time)
-
             const avg_consultation_time = res1.result[0][0].avg_consultation_time;
-
-            //console.log("After avg consult"); 
-            //console.log(avg_consultation_time); 
-
             // Average Queue Time
             req1 = {};
             res1 = {}
             await controller.avg_queue_time(req1, res1);
 
-            //console.log("fdsffds")
-            //console.log(res1.result[0][0].avg_queue_time);
             const avg_queue_time = res1.result[0][0].avg_queue_time;
-
-            
 
             // Completed Appointments/total appointment
             req1 = {};
@@ -58,11 +46,6 @@ const controller = {
             await controller.completed_over_total(req1, res1); 
 
             const completed = res1.result * 100;
-
-            console.log("YOLOOOOO")
-            console.log(avg_consultation_time);
-            console.log(avg_queue_time);
-            console.log(completed);
 
             res.render('./index.ejs', { avg_consultation_time: avg_consultation_time, avg_queue_time: avg_queue_time,completed: completed  });
         }
@@ -122,6 +105,7 @@ const controller = {
         });
         //console.log("outside");
     },
+
     searchAppointment_server1: async (req, res) => {
         const apptid = req.body;
 
@@ -147,6 +131,7 @@ const controller = {
         });
         //console.log("outside");
     },
+
     searchAppointment_server2: async (req, res) => {
         const apptid = req.body;
 
@@ -220,10 +205,10 @@ const controller = {
 
         if (res1.result[0].length > 0) {
             const sql = `
-        UPDATE node0_db
-        SET ${setClause}
-        WHERE apptid = \'${apptid}\';
-    `;
+                UPDATE node0_db
+                SET ${setClause}
+                WHERE apptid = \'${apptid}\';
+            `;
             await dbQuery(node_0, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -285,6 +270,11 @@ const controller = {
             status, TimeQueued, QueueDate, StartTime, EndTime,
             type, IsVirtual, MajorIsland, hospitalname, IsHospital
         } = req.body;
+
+        console.log(req.body);
+
+        console.log({ status, TimeQueued, QueueDate, StartTime, EndTime,
+            type, IsVirtual, MajorIsland, hospitalname, IsHospital});
 
         let apptid;
         let unique = 1;
@@ -456,12 +446,8 @@ const controller = {
         await dbQuery(node_0, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
-                //console.log("inside");
             } else {
-                console.log(result);
-                //console.log("inside2");
                 res.result = result;
-                //return result;
             }
         }
         );
@@ -477,12 +463,9 @@ const controller = {
         await dbQuery(node_0, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
-                //console.log("inside");
             } else {
-                console.log(result);
-                //console.log("inside2");
+                // console.log(result);
                 res.result = result;
-                //return result;
             }
         }
         );
