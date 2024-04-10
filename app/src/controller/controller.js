@@ -325,7 +325,6 @@ const controller = {
             \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
             `;
 
-
             await dbQuery(node_0, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -336,9 +335,7 @@ const controller = {
                 }
             });
         }
-
-
-
+        //res.status(201);
     },
 
     deleteNodeDB: async (req, res) => {

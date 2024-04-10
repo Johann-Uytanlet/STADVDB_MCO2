@@ -28,7 +28,7 @@ async function fetchPost(endpoint, formData) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
-    });
+    }).then();
 
     return response;
 };
@@ -41,19 +41,25 @@ async function fetchPost(endpoint, formData) {
  */
 addAppointmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-
+    console.log("INSIDE EVENT LISTENER OUTSIDE TRY CATCH");
     try {
         const appointmentFormData = await getAppointtmentFormData();
         const appointmentResponse = await fetchPost('/addAppointment', appointmentFormData);
 
+        console.log("INSIDE EVENT LISTENER");
+        console.log(appointmentResponse);
+
         if (appointmentResponse.status == 201) {
+            //alert('Appointment Successfully Added.');
             console.log('Appointment Successfully Added.');
         } else {
+            //alert('Error in adding appointment.');
             console.log('Error in adding appointment.');
             return;
         }
 
     } catch (error) {
+        //alert(error);
         console.log( error );
     }
 
