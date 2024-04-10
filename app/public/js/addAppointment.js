@@ -1,23 +1,27 @@
+// DOCUMENT ELEMENTS
 const addAppointmentForm = document.getElementById('addNewAppointment');
 
-const region = document.getElementById('app-region');
-const hospitalName = document.getElementById('app-hospitalname'); 
-const status = document.getElementById('app-status'); 
-const method = document.getElementById('app-method'); 
-const type = document.getElementById('app-type'); 
+const regionElement = document.getElementById('app-region');
+const hospitalNameElement = document.getElementById('app-hospitalname'); 
+const statusElement = document.getElementById('app-status'); 
+const methodElement = document.getElementById('app-method'); 
+const typeElement = document.getElementById('app-type'); 
 
-const date_queued = document.getElementById('date_queued'); 
-const time_queued = document.getElementById('time_queued'); 
+// TIME QUEUED
+const date_queuedElement = document.getElementById('date_queued'); 
+const time_queuedElement = document.getElementById('time_queued'); 
 
-const queue_date = document.getElementById('queue_date'); 
-const queue_time = document.getElementById('queue_time'); 
+// QUEUE DATE
+const queue_dateElement = document.getElementById('queue_date'); 
+const queue_timeElement = document.getElementById('queue_time'); 
 
-const start_date = document.getElementById('start_date'); 
-const start_time = document.getElementById('start_time'); 
+// START TIME
+const start_dateElement = document.getElementById('start_date'); 
+const start_timeElement = document.getElementById('start_time'); 
 
-const end_date = document.getElementById('end_date'); 
-const end_time = document.getElementById('end_time'); 
-
+// END TIME
+const end_dateElement = document.getElementById('end_date'); 
+const end_timeElement = document.getElementById('end_time'); 
 
 async function fetchPost(endpoint, formData) {
     let response = await fetch(endpoint, {
@@ -58,20 +62,52 @@ addAppointmentForm.addEventListener('submit', async function (e) {
 
 function getAppointtmentFormData() {
 
-    // Preprocess datetimes
+    const region = regionElement.value;
+    const status = statusElement.value;
+    const hospitalName = hospitalNameElement.value;
+    const IsHospital = hospitalName.trim() === '' ? 0 : 1;
+    const method = methodElement.value;
+    const methodBoolean = method.toLowerCase() === 'Virtual' ? 1 : 0;
+    const type = typeElement.value;
 
-    console.log(region.value);
-    console.log(hospitalName.innerText)
+    // Preprocess datetimes
+    // TIME QUEUED
+    const date_queued = date_queuedElement.value; 
+    const time_queued = time_queued.value; 
+    let TimeQueued = "";
+    TimeQueued += date_queued + " " + time_queued;
+
+    // QUEUE DATE
+    const queue_date = queue_dateElement.value; 
+    const queue_time = queue_timeElement.value;
+    let QueueDate = "";
+    QueueDate += queue_date + " " + queue_time;  
+
+    // START TIME
+    const start_date = start_dateElement.value; 
+    const start_time = start_timeElement.value; 
+    let StartTime = "";
+    StartTime += start_date + " " + start_time;
+
+    // END TIME
+    const end_date = end_dateElement.value; 
+    const end_time = end_timeElement.value; 
+    let EndTime = "";
+    EndTime += end_date + " " + end_time;
 
     const formData = {
-        region: region.value,
-        hospitalName: hospitalName.innerText,
-        status: status.value,
-        method: method.value,
-        type: type.value,
+        status: status,
+        region: region,
+        hospitalname: hospitalName,
+        IsVirtual: methodBoolean,
+        type: type,
+        MajorIsland: region,
+        IsHospital: IsHospital,
+        QueueDate: QueueDate,
+        TimeQueued: TimeQueued,
+        StartTime: StartTime,
+        EndTime: EndTime,
     };
-
-    console.log(formData);
-
+  
     return formData;
 };
