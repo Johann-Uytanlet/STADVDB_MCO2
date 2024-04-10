@@ -3,17 +3,17 @@ const controller = require('../controller/controller.js');
 
 
 
-req = {body: '000019E8D2903D7A8D69B782507287E7'};
-req = {body: 'asdfasfdasdf'};
+req = {body: '5F04266409AD193A648175E825482967'};
+//req = {body: 'asdfasfdasdf'};
 res = {};
 async function main(){
 
     // testing search
 
-    //await controller.searchAppointment(req, res);
+    await controller.searchAppointment_server2(req, res);
     //console.log("ASDFsafsdfasdfasdf");
-    //console.log(res);
-    // console.log(res.result[0].length); // if 0 no search, else found
+    console.log(res.result);
+    console.log(res.result[0].length); // if 0 no search, else found
     //if()
     //console.log(res.result[0][0]); // HOW TO GET THE OBJECT
     /*
@@ -27,12 +27,13 @@ async function main(){
 
     // testing update
 
-    //req.id = '000019E8D2903D7A8D69B782507287E7'
-    //req.body = {status: 'AAAAAAAAAAAAAAAAAAAAAAAAAAA', type: 'asdfasdf'};
+    /*
+    req.id = '00004590E197EAB7F2B92C3801607A7A'
+    req.body = {status: 'BBBBBBBBB', type: 'QWERTY'};
 
-    //await controller.updateAppointment(req, res);
-    //console.log(res);
-
+    await controller.updateAppointment(req, res);
+    console.log(res);
+    */
     // is appidunique test
 
     //await controller.isApptidUnique(req, res);
@@ -41,7 +42,7 @@ async function main(){
 
     // Insert
 
-    
+    /*
     const testData = {
         body: {
           status: "Pending",
@@ -60,14 +61,17 @@ async function main(){
     res = {};
     await controller.addAppointment(testData, res);
     console.log(res);
-    
+    */
 
-    /*
-    req = {body: '76411B02B21C017C755605F6EBDD7888'};
+    /* // testing delete
+    req = {body: '000019E8D2903D7A8D69B782507287E7'};
     res = {};
     await controller.deleteNodeDB(req, res);
-    console.log(res.result[0].affectedRows);
+    try{console.log(res.result[0].affectedRows);}
+    catch{console.log("NOOOO");}
     */
+    
+
 }
     
 

@@ -74,6 +74,56 @@ const controller = {
         });
         //console.log("outside");
     },
+    searchAppointment_server1: async  (req, res) => {
+        const apptid  = req.body;
+
+        const sql = `
+        SELECT *
+        FROM node1_db
+        WHERE apptid = '${apptid}';
+        `;
+
+        //console.log(sql);
+        
+        await dbQuery(node_1, sql, apptid, (err, result) => {
+            if (err) {
+                console.log(err);
+                console.log("inside");
+                res.result = err;
+            } else {
+                //console.log(result);
+                //console.log("inside2");
+                res.result = result;
+                return result;
+            }
+        });
+        //console.log("outside");
+    },
+    searchAppointment_server2: async  (req, res) => {
+        const apptid  = req.body;
+
+        const sql = `
+        SELECT *
+        FROM node2_db
+        WHERE apptid = '${apptid}';
+        `;
+
+        //console.log(sql);
+        
+        await dbQuery(node_2, sql, apptid, (err, result) => {
+            if (err) {
+                console.log(err);
+                console.log("inside");
+                res.result = err;
+            } else {
+                //console.log(result);
+                //console.log("inside2");
+                res.result = result;
+                return result;
+            }
+        });
+        //console.log("outside");
+    },
 
     updateAppointment: async (req, res) => {
         // Build the SET clause dynamically, ensuring valid fields and data types
@@ -116,7 +166,12 @@ const controller = {
     setClause = setClause.slice(0, -1);
 
     // Build the SQL query using parameterized queries for security
-    const sql = `
+    req1 = {body:  apptid}
+    res1 = {}
+    await controller.searchAppointment(req1, res1);
+
+    if(res1.result[0].length > 0){
+        const sql = `
         UPDATE node0_db
         SET ${setClause}
         WHERE apptid = \'${apptid}\';
@@ -131,49 +186,51 @@ const controller = {
             res.result = result;
             //return result;
         }
-});
-
-
-// find appointment then add to node 1 or 2 accordingly
-controller.searchAppointment(apptid)
-
-if(MajorIsland == 'Luzon'){
-
-    const sql = `
-    UPDATE node1_db
-    SET ${setClause}
-    WHERE apptid = \'${apptid}\';
-    `;
-    
-    await dbQuery(node_0, sql, apptid, (err, result) => {
-        if (err) {
-            console.log(err);
-            //console.log("inside");
-        } else {
-            //console.log(result);
-            console.log("Luzon");
         }
-    });
-} else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
+        );
 
-    const sql = `
-        UPDATE node2_db
-        SET ${setClause}
-        WHERE apptid = \'${apptid}\';
-    `;
+        //console.log("before")
+        //console.log(res1.result[0][0].MajorIsland)
 
-
-    await dbQuery(node_0, sql, apptid, (err, result) => {
-        if (err) {
-            console.log(err);
-            //console.log("inside");
-        } else {
-            //console.log(result);
-            console.log("Visayas/Mindanao");
+        if(res1.result[0][0].MajorIsland == 'Luzon'){
+            const sql = `
+            UPDATE node1_db
+            SET ${setClause}
+            WHERE apptid = \'${apptid}\';
+        `;
+            await dbQuery(node_0, sql, apptid, (err, result) => {
+            if (err) {
+                console.log(err);
+                //console.log("inside");
+            } else {
+                console.log(result);
+                //console.log("inside2");
+                res.result = result;
+                //return result;
+            }
+            }
+            );
+        } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao'){
+            const sql = `
+                UPDATE node2_db
+                SET ${setClause}
+                WHERE apptid = \'${apptid}\';
+            `;
+                await dbQuery(node_0, sql, apptid, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    //console.log("inside");
+                } else {
+                    console.log(result);
+                    //console.log("inside2");
+                    res.result = result;
+                    //return result;
+                }
+                }
+                );
         }
-    });
-}
-    },
+    }
+},
 
     addAppointment: async (req, res) => {
         const { 
@@ -279,25 +336,67 @@ if(MajorIsland == 'Luzon'){
     deleteNodeDB: async  (req, res) => {
         const apptid  = req.body;
 
+        req1 = {body:  apptid}
+        res1 = {}
+        await controller.searchAppointment(req1, res1);
+
+    if(res1.result[0].length > 0){
         const sql = `
         DELETE FROM node0_db
         WHERE apptid = '${apptid}';
         `;
-
-        //console.log(sql);
-        
         await dbQuery(node_0, sql, apptid, (err, result) => {
+        if (err) {
+            console.log(err);
+            //console.log("inside");
+        } else {
+            console.log(result);
+            //console.log("inside2");
+            res.result = result;
+            //return result;
+        }
+        }
+        );
+
+        //console.log("before")
+        //console.log(res1.result[0][0].MajorIsland)
+
+        if(res1.result[0][0].MajorIsland == 'Luzon'){
+            const sql = `
+            DELETE FROM node1_db
+            WHERE apptid = '${apptid}';
+            `;
+            await dbQuery(node_0, sql, apptid, (err, result) => {
             if (err) {
                 console.log(err);
                 //console.log("inside");
             } else {
-                //console.log(result);
+                console.log(result);
                 //console.log("inside2");
                 res.result = result;
-                return result;
+                //return result;
             }
-        });
-        //console.log("outside");
+            }
+            );
+        } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao'){
+            const sql = `
+            DELETE FROM node2_db
+            WHERE apptid = '${apptid}';
+            `;
+                await dbQuery(node_0, sql, apptid, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    //console.log("inside");
+                } else {
+                    console.log(result);
+                    //console.log("inside2");
+                    res.result = result;
+                    //return result;
+                }
+                }
+                );
+        }
+    }
     },
 
 };
