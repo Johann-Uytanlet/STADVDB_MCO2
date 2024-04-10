@@ -449,7 +449,7 @@ const controller = {
 
     avg_consultation_time: async (req, res) => {
         const sql = `
-        SELECT AVG(TIMESTAMPDIFF(SECOND, StartTime, EndTime)) AS avg_consultation_time
+        SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time
         FROM node0_db;
         `;
 
@@ -467,7 +467,7 @@ const controller = {
         );
     }, avg_queue_time: async (req, res) => {
         const sql = `
-        SELECT AVG(TIMESTAMPDIFF(SECOND, TimeQueued, QueueDate)) AS avg_queue_time
+        SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time
         FROM node0_db; 
         `;
 
