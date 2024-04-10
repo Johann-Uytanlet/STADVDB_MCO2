@@ -10,16 +10,16 @@
   <!-- Header and Hero Section -->
   <%- include("./header.ejs") %>
 
-  
-  <!-- About Section -->
-  <%-include("./about.ejs") %>
 
-      
-  <!-- ======= Services Section ======= -->
-  <%-include("./feature.ejs") %>
+    <!-- About Section -->
+    <%-include("./about.ejs") %>
 
 
-    <main id="main">
+      <!-- ======= Services Section ======= -->
+      <%-include("./feature.ejs") %>
+
+
+        <main id="main">
 
 
           <!-- ======= Stats Counter Section ======= -->
@@ -91,15 +91,20 @@
               </div>
               <form id="Search-Form" class="p-2">
                 <div>
-                  <label for="variable1" class="fw-bold">AppId</label>
+                  <label for="appointment_id_search" class="fw-bold">AppId</label>
                   <input type="text" class="form-control underline" id="appointment_id_search" placeholder="">
                 </div>
                 <div class="d-flex justify-content-center m-3">
-                  <button type="submit" class="btn btn-primary">Search</button>
+                  <button type="submit" id="search-btn" class="btn btn-primary">Search</button>
                 </div>
               </form>
+              <div class="container display-searched-appointment mt-3">
+
+              </div>
+
             </div>
           </div>
+
 
           <!-- table -->
 
@@ -117,51 +122,61 @@
             </div>
 
             <div class="container switch">
-              <table class="table table-hover" id="table-section">
-                <thead>
-                  <tr>
-                    <th>apid</th>
-                    <th>status</th>
-                    <th>Time Queued</th>
-                    <th>Queue Date</th>
-                    <th>Start Time</th>
-                    <th>End time</th>
-                    <th>Type</th>
-                    <th>isVirtual</th>
-                    <th>Major Island</th>
-                    <th>Hospital Name</th>
-                    <th>Hospital/Clinic</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>BDE67BD9610065D068F8EC532FEE8263</td>
-                    <td>Pending</td>
-                    <td>2024-04-10 18:00:00</td>
-                    <td>2024-04-11 16:00:00</td>
-                    <td>2024-04-11 23:00:00</td>
-                    <td>2024-04-11 23:30:00</td>
-                    <td>Checkup</td>
-                    <td>1</td>
-                    <td>Visayas</td>
-                    <td>Central General Hospital</td>
-                    <td>1</td>
-                  </tr>
-                  <tr>
-                    <td>BDE67BD9610065D068F8EC532FEE8263</td>
-                    <td>Pending</td>
-                    <td>2024-04-10 18:00:00</td>
-                    <td>2024-04-11 16:00:00</td>
-                    <td>2024-04-11 23:00:00</td>
-                    <td>2024-04-11 23:30:00</td>
-                    <td>Checkup</td>
-                    <td>1</td>
-                    <td>Visayas</td>
-                    <td>Central General Hospital</td>
-                    <td>1</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div>
+                <table class="table table-hover" id="table-section">
+                  <thead>
+                    <tr>
+                      <th>apid</th>
+                      <th>status</th>
+                      <th>Time Queued</th>
+                      <th>Queue Date</th>
+                      <th>Start Time</th>
+                      <th>End time</th>
+                      <th>Type</th>
+                      <th>isVirtual</th>
+                      <th>Major Island</th>
+                      <th>Hospital Name</th>
+                      <th>Hospital/Clinic</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  <% viewApp.forEach(element => { %>
+                    <tr>
+                      <td><%= element.apptid %></td>
+                      <td><%= element.status %></td>
+                      <td><%= element.TimedQueued %></td>
+                      <td><%= element.QueueDate %></td>
+                      <td><%= element.StartTime %></td>
+                      <td><%= element.EndTime %></td>
+                      <td><%= element.type %></td>
+                      <td><%= element.IsVirtual %></td>
+                      <td><%= element.MajorIsland %></td>
+                      <td><%= element.hospitalname %></td>
+                      <td><%= element.IsHospital %></td>
+                    </tr>
+                  <% }) %>
+
+                     
+
+                    
+                  </tbody>
+                </table>
+
+                <div class="d-flex justify-content-end align-items-center m-2 next-page-section">
+                  <label for="Page-number" style="padding-right: 5px;">Page:</label>
+                  <div class="d-flex justify-content-center" style="padding-right: 5px;">
+                    <input type="text" id="page-number"
+                      style="width: 40px; border-radius: 5px; height: 30px; text-align: center;" value="1">
+                  </div>
+                  <button id="prevBtn" data-mdb-ripple-color="dark" data-mdb-ripple-init=""
+                    class="btn btn-link datatable-pagination-button datatable-pagination-left"><i
+                      class="fa fa-chevron-left"></i></button>
+                  <button id="nextBtn" data-mdb-ripple-color="dark" data-mdb-ripple-init=""
+                    class="btn btn-link datatable-pagination-button datatable-pagination-right"><i
+                      class="fa fa-chevron-right"></i></button>
+                </div>
+              </div>
 
               <form id="addNewAppointment">
 
@@ -272,28 +287,28 @@
                 <div class="container mt-3 text-center">
                   <button type="submit" id="submitAppForm" class="btn btn-primary btn-md py-1 px-3">Submit</button>
                 </div>
-                
+
               </form>
             </div>
           </section>
 
 
-    </main><!-- End #main -->
+        </main><!-- End #main -->
 
-    <!-- Footer -->
-    <%- include("./footer.ejs") %>
+        <!-- Footer -->
+        <%- include("./footer.ejs") %>
 
-      <!-- Vendor JS Files -->
-      <script defer src="/vendor/purecounter/purecounter_vanilla.js"></script>
-      <script defer src="/vendor/aos/aos.js"></script>
-      <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script defer src="/vendor/glightbox/js/glightbox.min.js"></script>
-      <script defer src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-      <script defer src="/vendor/swiper/swiper-bundle.min.js"></script>
-      <script defer src="/vendor/php-email-form/validate.js"></script>
+          <!-- Vendor JS Files -->
+          <script defer src="/vendor/purecounter/purecounter_vanilla.js"></script>
+          <script defer src="/vendor/aos/aos.js"></script>
+          <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+          <script defer src="/vendor/glightbox/js/glightbox.min.js"></script>
+          <script defer src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+          <script defer src="/vendor/swiper/swiper-bundle.min.js"></script>
+          <script defer src="/vendor/php-email-form/validate.js"></script>
 
-      <!-- Template Main JS File -->
-      <script defer src="/js/main.js"></script>
+          <!-- Template Main JS File -->
+          <script defer src="/js/main.js"></script>
 
 </body>
 

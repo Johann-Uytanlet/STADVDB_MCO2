@@ -2,26 +2,26 @@
 const addAppointmentForm = document.getElementById('addNewAppointment');
 
 const regionElement = document.getElementById('app-region');
-const hospitalNameElement = document.getElementById('app-hospitalname'); 
-const statusElement = document.getElementById('app-status'); 
-const methodElement = document.getElementById('app-method'); 
-const typeElement = document.getElementById('app-type'); 
+const hospitalNameElement = document.getElementById('app-hospitalname');
+const statusElement = document.getElementById('app-status');
+const methodElement = document.getElementById('app-method');
+const typeElement = document.getElementById('app-type');
 
 // TIME QUEUED
-const date_queuedElement = document.getElementById('date_queued'); 
-const time_queuedElement = document.getElementById('time_queued'); 
+const date_queuedElement = document.getElementById('date_queued');
+const time_queuedElement = document.getElementById('time_queued');
 
 // QUEUE DATE
-const queue_dateElement = document.getElementById('queue_date'); 
-const queue_timeElement = document.getElementById('queue_time'); 
+const queue_dateElement = document.getElementById('queue_date');
+const queue_timeElement = document.getElementById('queue_time');
 
 // START TIME
-const start_dateElement = document.getElementById('start_date'); 
-const start_timeElement = document.getElementById('start_time'); 
+const start_dateElement = document.getElementById('start_date');
+const start_timeElement = document.getElementById('start_time');
 
 // END TIME
-const end_dateElement = document.getElementById('end_date'); 
-const end_timeElement = document.getElementById('end_time'); 
+const end_dateElement = document.getElementById('end_date');
+const end_timeElement = document.getElementById('end_time');
 
 async function fetchPost(endpoint, formData) {
     let response = await fetch(endpoint, {
@@ -44,23 +44,32 @@ addAppointmentForm.addEventListener('submit', async function (e) {
     //console.log("INSIDE EVENT LISTENER OUTSIDE TRY CATCH");
     try {
         const appointmentFormData = await getAppointtmentFormData();
-        const appointmentResponse = await fetchPost('/addAppointment', appointmentFormData);
+        const appointmentResponse = await fetchPost('/addAppointment', appointmentFormData)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.apptid); // Log the response data
+                return data; // Return the response data
+            })
+            .catch(error => {
+                console.error('Error fetching appointment data:', error);
+                return null; // Return null or handle the error as needed
+            });
 
         //console.log("INSIDE EVENT LISTENER");
-        console.log(appointmentResponse);
+        // console.log(appointmentResponse.apptid);
 
-        if (appointmentResponse.status == 201) {
-            alert('Appointment Successfully Added.');
-            console.log('Appointment Successfully Added.');
-        } else {
-            alert('Error in adding appointment.');
-            console.log('Error in adding appointment.');
-            return;
-        }
+        // if (appointmentResponse.status == 201) {
+        //     alert('Appointment Successfully Added.');
+        //     console.log('Appointment Successfully Added.');
+        //     console.log(data.apptid)
+        // } else {
+        //     alert('Error in adding appointment.');
+        //     console.log('Error in adding appointment.');
+        // }
 
     } catch (error) {
         //alert(error);
-        console.log( error );
+        console.log(error);
     }
 
 });
@@ -78,26 +87,26 @@ function getAppointtmentFormData() {
 
     // Preprocess datetimes
     // TIME QUEUED
-    const date_queued = date_queuedElement.value; 
-    const time_queued = time_queuedElement.value; 
+    const date_queued = date_queuedElement.value;
+    const time_queued = time_queuedElement.value;
     let TimeQueued = "";
     TimeQueued += date_queued + " " + time_queued;
 
     // QUEUE DATE
-    const queue_date = queue_dateElement.value; 
+    const queue_date = queue_dateElement.value;
     const queue_time = queue_timeElement.value;
     let QueueDate = "";
-    QueueDate += queue_date + " " + queue_time;  
+    QueueDate += queue_date + " " + queue_time;
 
     // START TIME
-    const start_date = start_dateElement.value; 
-    const start_time = start_timeElement.value; 
+    const start_date = start_dateElement.value;
+    const start_time = start_timeElement.value;
     let StartTime = "";
     StartTime += start_date + " " + start_time;
 
     // END TIME
-    const end_date = end_dateElement.value; 
-    const end_time = end_timeElement.value; 
+    const end_date = end_dateElement.value;
+    const end_time = end_timeElement.value;
     let EndTime = "";
     EndTime += end_date + " " + end_time;
 
@@ -114,6 +123,6 @@ function getAppointtmentFormData() {
         StartTime: StartTime,
         EndTime: EndTime,
     };
-    
+
     return formData;
 };

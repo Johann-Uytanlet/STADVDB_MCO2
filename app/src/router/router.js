@@ -9,7 +9,9 @@ const controller = require('../controller/controller.js');
 
 // GET
 router.get("/", controller.homepage);
-router.get('/getAppointment', controller.searchAppointment);
+router.get("/homepage", controller.homepage);
+router.post('/getAppointment', controller.searchAppointment);
+
 
 // POST
 router.post('/addAppointment', controller.addAppointment);

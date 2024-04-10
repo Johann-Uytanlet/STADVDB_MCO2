@@ -1,10 +1,13 @@
 const { node_0, node_1, node_2, dbQuery, getConnection } = require('../config/conn.js');
 
+
 // TODO: Replace the if-else statements in the (err, result) anonymous functions to respond with the appropriate status codes and data.
 /*
     TODO: Add/Implement the following functions
         - searchNodeDBPerPage
 */
+const mysql = require("mysql2");
+const conn = require("../config/conn.js");
 
 function generateRandomHexString(length) {
     const characters = '0123456789ABCDEF';
@@ -38,16 +41,98 @@ const controller = {
             res1 = {}
             await controller.avg_queue_time(req1, res1);
 
+            //console.log(res1.result[0][0].avg_queue_time);
             const avg_queue_time = res1.result[0][0].avg_queue_time;
 
             // Completed Appointments/total appointment
             req1 = {};
             res1 = {}
-            await controller.completed_over_total(req1, res1); 
+            await controller.completed_over_total(req1, res1);
 
             const completed = res1.result * 100;
 
-            res.render('./index.ejs', { avg_consultation_time: avg_consultation_time, avg_queue_time: avg_queue_time,completed: completed  });
+            // console.log(avg_consultation_time);
+            // console.log(avg_queue_time);
+            // console.log(completed);
+
+            const content = {};
+            let pageNum;
+            let limit;
+            let viewPartialAppointments;
+            let offset;
+            let sql;
+
+            console.log(req.query.page)
+
+            if (req.query.page == null) {
+                pageNum = 1;
+                limit = pageNum * 10;
+
+                sql = `
+                SELECT *
+                FROM node0_db
+                LIMIT ${limit};
+                `;
+
+
+                viewPartialAppointments = await dbQuery(node_0, sql, content, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        return result[0];
+                    }
+                });
+
+
+                viewPartialAppointments.forEach(item => {
+                    if (item.TimeQueued !== null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
+                    if (item.QueueDate !== null) { item.QueueDate = item.QueueDate.toLocaleString(); }
+                    if (item.StartTime !== null) { item.StartTime = item.StartTime.toLocaleString(); }
+                    if (item.EndTime !== null) { item.EndTime = item.EndTime.toLocaleString(); }
+                });
+
+                res.render('./index.ejs', { viewApp: viewPartialAppointments, avg_consultation_time: avg_consultation_time, avg_queue_time: avg_queue_time, completed: completed });
+
+            } else {
+
+                pageNum = req.query.page
+                limit = 10;
+                offset = (pageNum - 1) * limit;
+
+                sql = `
+                SELECT *
+                FROM node0_db
+                LIMIT ${limit}
+                OFFSET ${offset};
+                `;
+
+                viewPartialAppointments = await dbQuery(node_0, sql, content, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        return result[0];
+                    }
+                });
+
+
+                viewPartialAppointments.forEach(item => {
+                    if (item.TimeQueued !== null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
+                    if (item.QueueDate !== null) { item.QueueDate = item.QueueDate.toLocaleString(); }
+                    if (item.StartTime !== null) { item.StartTime = item.StartTime.toLocaleString(); }
+                    if (item.EndTime !== null) { item.EndTime = item.EndTime.toLocaleString(); }
+                });
+
+
+                const numAppointment = viewPartialAppointments.length;
+
+                console.log(viewPartialAppointments);
+
+                res.status(201).json({ viewApp: viewPartialAppointments});
+            }
+
+            console.log(pageNum);
+
+
         }
         catch (e) {
             console.log("controller.js error");
@@ -77,26 +162,38 @@ const controller = {
     },
 
     searchAppointment: async (req, res) => {
-        const apptid = req.body;
 
-        const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';
-        `;
+        try {
+            const apptid = req.body.apptid;
 
-        //console.log(sql);
+            const sql = `
+                SELECT *
+                FROM node0_db
+                WHERE apptid = '${apptid}';
+                `;
 
-        await dbQuery(node_0, sql, apptid, (err, result) => {
-            if (err) {
-                console.log(err);
-                console.log("inside");
-                res.result = err;
-            } else {
-                //console.log(result);
-                //console.log("inside2");
-                res.result = result;
-                return result;
-            }
-        });
-        //console.log("outside");
+            console.log(sql);
+
+            conn.dbQuery(node_0, sql, apptid, (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    if (result[0].length > 0) {
+                        console.log(result)
+                        const appointment = result[0];
+                        res.status(200).json(appointment[0]);
+                    } else {
+                        console.log(result)
+                        res.status(200).json([]);
+                    }
+                }
+            });
+
+            // console.log(appointment[0]);
+
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     searchAppointment_server1: async (req, res) => {
@@ -312,7 +409,7 @@ const controller = {
                     console.log(err);
                     //console.log("inside");
                 } else {
-                    //console.log(result);
+                    console.log(result);
                     console.log("Luzon");
                     return res.status(201).json({ message: "Appointment created", apptid: result.apptid });
                 }

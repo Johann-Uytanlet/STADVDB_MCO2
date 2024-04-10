@@ -920,6 +920,18 @@ Forms and Table
   display: block;
   scrollbar-width: 5px;
 }
+
+#display-section{
+  background-color: #fff;
+  overflow-x:scroll;
+  display: block;
+  scrollbar-width: 5px;
+}
+
+.next-page-section{
+  display: block;
+}
+
 th{
   text-align: center;
 }
@@ -975,7 +987,10 @@ search area
   background-color: rgba(245, 245, 245, 0.383);
 }
 
-
+.id-notfound{
+  color: red;
+  text-align: center;
+}
 
 /**
 summary reports

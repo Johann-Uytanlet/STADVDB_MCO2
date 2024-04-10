@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const bodyParser = require('body-parser');
 const express = require("express");
 const cors = require("cors");
 
@@ -14,6 +15,7 @@ async function startServer() {
     app.use(express.static('public'));
     app.use(cors());
     app.use(express.json());
+    app.use(bodyParser.json());
     app.use(router);
 
     app.listen(port, () => {
