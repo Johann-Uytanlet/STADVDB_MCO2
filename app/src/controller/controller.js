@@ -57,7 +57,7 @@ const controller = {
             res1 = {}
             await controller.completed_over_total(req1, res1); 
 
-            const completed = res1.result;
+            const completed = res1.result * 100;
 
             console.log("YOLOOOOO")
             console.log(avg_consultation_time);
