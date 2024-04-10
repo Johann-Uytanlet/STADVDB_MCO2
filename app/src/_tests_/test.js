@@ -28,12 +28,13 @@ async function main(){
     // testing update
 
     /*
-    req.id = '00004590E197EAB7F2B92C3801607A7A'
-    req.body = {status: 'BBBBBBBBB', type: 'QWERTY'};
+    req.id = '00004590E197EAB7F2B92C3801607A7A' 
+    req.body = {status: 'Complete', type: 'Consultation'};
 
     await controller.updateAppointment(req, res);
     console.log(res);
     */
+    
     // is appidunique test
 
     //await controller.isApptidUnique(req, res);
@@ -42,17 +43,17 @@ async function main(){
 
     // Insert
 
-    /*
+    
     const testData = {
         body: {
-          status: "Pending",
+          status: "Complete",
           TimeQueued: new Date("2024-04-10T10:00:00.000Z"), // Replace with your desired date and time
           QueueDate: new Date("2024-04-11T08:00:00.000Z"), // Replace with your desired date and time
           StartTime: new Date("2024-04-11T15:00:00.000Z"), // Replace with your desired date and time
           EndTime: new Date("2024-04-11T15:30:00.000Z"), // Replace with your desired date and time
-          type: "Checkup",
+          type: "Consultation",
           IsVirtual: 1,
-          MajorIsland: "Visayas",
+          MajorIsland: "Luzon",
           hospitalname: "Central General Hospital",
           IsHospital: 1
         }
@@ -61,7 +62,7 @@ async function main(){
     res = {};
     await controller.addAppointment(testData, res);
     console.log(res);
-    */
+    
 
     /* // testing delete
     req = {body: '000019E8D2903D7A8D69B782507287E7'};
@@ -87,11 +88,12 @@ async function main(){
     console.log("asdf")
     console.log(res.result[0][0].avg_queue_time);*/
 
+    /*
     res = {};
     req = {};
     await controller.completed_over_total(req, res);
     console.log("asdf")
-    console.log(res.result);
+    console.log(res.result);*/
 }
     
 

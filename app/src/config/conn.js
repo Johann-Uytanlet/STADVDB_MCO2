@@ -88,6 +88,21 @@ async function dbQuery(pool, query, content, callback) {
         // Release the database connection back to the pool
         connection.release();
 
+        
+        content2 = {}
+        await logQuery(query, content2, (err, result) => {
+            if (err) {
+                console.log(err);
+                //console.log("inside");
+            } else {
+                console.log(result);
+                //console.log("inside2");
+                //res.result = result;
+                //return result;
+            }
+        }
+        );
+
         //console.log(result);
         //return result;
         return callback(null, result);
@@ -100,14 +115,6 @@ async function dbQuery(pool, query, content, callback) {
         // If there is an error, rollback the transaction
         if (connection) await connection.rollback();
 
-        // Call storeQuery with pool, query, and content
-        // to store the query in the logs. Ignores read-only queries
-        /*
-        let query_type = query.split(" ")[0];
-        if (process.env.NODE_NUM_CONFIGURATION != -1 && query_type != "SELECT") {
-            await storeQuery(pool, query, content);
-        } */
-
         callback(err);
 
         // Throw the error for handling with try/catch or promises
@@ -119,6 +126,68 @@ async function dbQuery(pool, query, content, callback) {
         }
     }
 };
+
+
+async function logQuery(query, content, callback){
+    let connection;
+    // get first word
+    let query_type = query.split(" ")[0];
+    const x = new Date();
+    const year = x.getFullYear();
+    const month = ('0' + (x.getMonth() + 1)).slice(-2); // Adding 1 because getMonth returns 0-based index
+    const date = ('0' + x.getDate()).slice(-2);
+    const hours = ('0' + x.getHours()).slice(-2);
+    const minutes = ('0' + x.getMinutes()).slice(-2);
+    const seconds = ('0' + x.getSeconds()).slice(-2);
+
+    const formattedDate = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+    // console.log(formattedDate);
+    // query_type != "SELECT"
+    query = query.replace(/'/g, "\\'");
+
+    if(query_type != "SELECT"){
+        try{
+            connection = await node_0.getConnection();
+    
+            const sql = `
+            INSERT INTO appointment_logs
+            (statement, t_type, date_log) 
+            VALUES (\'${query}\', \'${query_type}\', \'${formattedDate}\');
+            `
+    
+            await connection.beginTransaction;
+
+
+            const result = await connection.query(sql, content);
+
+            await connection.commit();
+
+            // Release the database connection back to the pool
+            connection.release();
+
+            //console.log(result);
+            //return result;
+            return callback(null, result);
+    
+    
+    
+        } catch (err) {
+            console.log("ERROR IN STORE QUERY: ")
+            console.log(err);
+
+             // If there is an error, rollback the transaction
+            if (connection) await connection.rollback();
+            callback(err);
+    
+        } finally {
+            // Release the database connection back to the pool
+            if (connection) {
+                connection.release();
+            }
+        }
+    }
+    
+}
 
 /* 
     TODO: Add/Implement recoverTransactions()

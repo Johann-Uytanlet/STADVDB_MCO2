@@ -58,11 +58,7 @@ const controller = {
     isApptidUnique: async (req, res) => {
         const apptid = req.body;
 
-        const sql = `
-        SELECT COUNT(*) AS count
-        FROM node0_db
-        WHERE apptid = \'${apptid}\';
-        `;
+        const sql = `SELECT COUNT(*) AS count FROM node0_db WHERE apptid = \'${apptid}\';`;
 
         //console.log(sql);
 
@@ -83,10 +79,7 @@ const controller = {
     searchAppointment: async (req, res) => {
         const apptid = req.body;
 
-        const sql = `
-        SELECT *
-        FROM node0_db
-        WHERE apptid = '${apptid}';
+        const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';
         `;
 
         //console.log(sql);
@@ -109,10 +102,7 @@ const controller = {
     searchAppointment_server1: async (req, res) => {
         const apptid = req.body;
 
-        const sql = `
-        SELECT *
-        FROM node1_db
-        WHERE apptid = '${apptid}';
+        const sql = `SELECT * FROM node1_db WHERE apptid = '${apptid}';
         `;
 
         //console.log(sql);
@@ -135,10 +125,7 @@ const controller = {
     searchAppointment_server2: async (req, res) => {
         const apptid = req.body;
 
-        const sql = `
-        SELECT *
-        FROM node2_db
-        WHERE apptid = '${apptid}';
+        const sql = `SELECT * FROM node2_db WHERE apptid = '${apptid}';
         `;
 
         //console.log(sql);
@@ -204,11 +191,9 @@ const controller = {
         await controller.searchAppointment(req1, res1);
 
         if (res1.result[0].length > 0) {
-            const sql = `
-                UPDATE node0_db
-                SET ${setClause}
-                WHERE apptid = \'${apptid}\';
-            `;
+
+            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+          
             await dbQuery(node_0, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -226,10 +211,7 @@ const controller = {
             //console.log(res1.result[0][0].MajorIsland)
 
             if (res1.result[0][0].MajorIsland == 'Luzon') {
-                const sql = `
-            UPDATE node1_db
-            SET ${setClause}
-            WHERE apptid = \'${apptid}\';
+                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';
         `;
                 await dbQuery(node_0, sql, apptid, (err, result) => {
                     if (err) {
@@ -244,11 +226,8 @@ const controller = {
                 }
                 );
             } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
-                const sql = `
-                UPDATE node2_db
-                SET ${setClause}
-                WHERE apptid = \'${apptid}\';
-            `;
+                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+
                 await dbQuery(node_0, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -308,11 +287,7 @@ const controller = {
         formattedStartTime = formatDateTime(StartTime);
         formattedEndTime = formatDateTime(EndTime);
 
-        const sql = `
-            INSERT INTO node0_db 
-            (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)
-            VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', 
-            \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
+        const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
         `;
 
         await dbQuery(node_0, sql, apptid, (err, result) => {
@@ -330,12 +305,7 @@ const controller = {
 
         if (MajorIsland == 'Luzon') {
 
-            const sql = `
-            INSERT INTO node1_db 
-            (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)
-            VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', 
-            \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
-            `;
+            const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
             await dbQuery(node_0, sql, apptid, (err, result) => {
                 if (err) {
@@ -379,10 +349,8 @@ const controller = {
         await controller.searchAppointment(req1, res1);
 
         if (res1.result[0].length > 0) {
-            const sql = `
-        DELETE FROM node0_db
-        WHERE apptid = '${apptid}';
-        `;
+            const sql = `DELETE FROM node0_db WHERE apptid = '${apptid}';`;
+
             await dbQuery(node_0, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -400,10 +368,7 @@ const controller = {
             //console.log(res1.result[0][0].MajorIsland)
 
             if (res1.result[0][0].MajorIsland == 'Luzon') {
-                const sql = `
-            DELETE FROM node1_db
-            WHERE apptid = '${apptid}';
-            `;
+                const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}';`;
                 await dbQuery(node_0, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -417,10 +382,7 @@ const controller = {
                 }
                 );
             } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
-                const sql = `
-            DELETE FROM node2_db
-            WHERE apptid = '${apptid}';
-            `;
+                const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}';`;
                 await dbQuery(node_0, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -438,10 +400,7 @@ const controller = {
     },
 
     avg_consultation_time: async (req, res) => {
-        const sql = `
-        SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time
-        FROM node0_db;
-        `;
+        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time FROM node0_db;`;
 
         await dbQuery(node_0, sql, 'apptid', (err, result) => {
             if (err) {
@@ -452,10 +411,7 @@ const controller = {
         }
         );
     }, avg_queue_time: async (req, res) => {
-        const sql = `
-        SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time
-        FROM node0_db; 
-        `;
+        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time FROM node0_db;`;
 
         result = {}
         result2 = {}
@@ -470,10 +426,7 @@ const controller = {
         }
         );
     }, completed_over_total: async (req, res) => {
-        var sql = `
-        SELECT COUNT(*) as total
-        FROM node0_db;
-        `;
+        var sql = `SELECT COUNT(*) as total FROM node0_db;`;
         okay = false;
         okay2 = false;
 
@@ -491,11 +444,7 @@ const controller = {
             }
         }
         );
-        sql = `
-            SELECT COUNT(*) as total
-            FROM node0_db
-            WHERE status = 'Complete';
-            `;
+        sql = `SELECT COUNT(*) as total FROM node0_db WHERE status = 'Complete';`;
         await dbQuery(node_0, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
