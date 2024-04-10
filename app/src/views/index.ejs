@@ -2,436 +2,287 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Appointa</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,600,700" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/vendor/aos/aos.css" rel="stylesheet">
-  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- table css stuff -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script defer src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
-  
-  
-  <!-- Template Main CSS File -->
-  <link href="/css/style.css" rel="stylesheet">
-  
-
-  <!--script for table-->
-  <script defer>
-    function scrollToForm() {
-            var element = document.getElementById("formgrey");
-            element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-      var actions = $("table td:last-child").html();
-      // Append table with add row form on add new button click
-        $(".add-new").click(function(){
-        $(this).attr("disabled", "disabled");
-        var index = $("table tbody tr:last-child").index();
-            var row = '<tr>' +
-                '<td><input type="text" class="form-control" name="appId" id="appId"></td>' +
-                '<td><input type="text" class="form-control" name="status" id="status"></td>' +
-                '<td><input type="text" class="form-control" name="timeQueued" id="timeQueued"></td>' +
-                '<td><input type="text" class="form-control" name="queueDate" id="queueDate"></td>' +
-                '<td><input type="text" class="form-control" name="startTime" id="startTime"></td>' +
-                '<td><input type="text" class="form-control" name="endTime" id="endTime"></td>' +
-                '<td><input type="text" class="form-control" name="type" id="type"></td>' +
-                '<td><input type="text" class="form-control" name="virtual" id="virtual"></td>' +
-                '<td><input type="text" class="form-control" name="major" id="major"></td>' +
-                '<td><input type="text" class="form-control" name="hospitalName" id="hospitalName"></td>' +
-                '<td><input type="text" class="form-control" name="hc" id="hc"></td>' +
-          '<td>' + actions + '</td>' +
-            '</tr>';
-          $("table").append(row);		
-        $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-      // Add row on add button click
-      $(document).on("click", ".add", function(){
-        var empty = false;
-        var input = $(this).parents("tr").find('input[type="text"]');
-            input.each(function(){
-          if(!$(this).val()){
-            $(this).addClass("error");
-            empty = true;
-          } else{
-                    $(this).removeClass("error");
-                }
-        });
-        $(this).parents("tr").find(".error").first().focus();
-        if(!empty){
-          input.each(function(){
-            $(this).parent("td").html($(this).val());
-          });			
-          $(this).parents("tr").find(".add, .edit").toggle();
-          $(".add-new").removeAttr("disabled");
-        }		
-        });
-      // Edit row on edit button click
-      $(document).on("click", ".edit", function(){		
-            $(this).parents("tr").find("td:not(:last-child)").each(function(){
-          $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-        });		
-        $(this).parents("tr").find(".add, .edit").toggle();
-        $(".add-new").attr("disabled", "disabled");
-        });
-      // Delete row on delete button click
-      // Delete row on delete button click
-      $(document).on("click", ".delete", function(){
-          $(this).tooltip('hide'); // Hide the tooltip
-          $(this).parents("tr").remove();
-          $(".add-new").removeAttr("disabled");
-      });
-
-    });
-    </script>
+  <%-include("./head.ejs") %>
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center header-transparent">
-    <div class="container d-flex align-items-center">
-      <h1 class="logo me-auto"><a href="index.html">Appointa</a></h1>
-    </div>
-  </header><!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="clearfix">
-    <div class="container d-flex h-100">
-      <div class="row justify-content-center align-self-center" data-aos="fade-up">
-        <div class="col-lg-6 intro-info order-lg-first order-last" data-aos="zoom-in" data-aos-delay="100">
-          <h2>A place to <br>find Your <span>Appointments!</span></h2>
-          <div>
-            <a href="#" class="btn-get-started scrollto" onclick="scrollToForm()">View</a>
-          </div>
-        </div>
-
-        <div class="col-lg-6 intro-img order-lg-last order-first" data-aos="zoom-out" data-aos-delay="200">
-          <img src="/img/intro-img.svg" alt="" class="img-fluid">
-        </div>
-      </div>
-
-    </div>
-  </section><!-- End Hero -->
-
-  <main id="main">
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-
-      <div class="container" data-aos="fade-up">
-        <div class="row">
-
-          <div class="col-lg-5 col-md-6">
-            <div class="about-img" data-aos="fade-right" data-aos-delay="100">
-              <img src="img/pogi.jpg" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-7 col-md-6">
-            <div class="about-content" data-aos="fade-left" data-aos-delay="100">
-              <h2>About the website</h2>
-              <p>The website provides a comprehensive platform for viewing, managing, and updating appointments across hospitals in Luzon, Visayas, and Mindanao. Users can easily access information such as appointment ID, status, time queued, queue date, start and end times, appointment type (virtual or face-to-face), and the major island where the hospital is located. This detailed view allows users to quickly identify their appointments, check for any changes or updates, and plan their schedules accordingly. The website's intuitive interface makes it easy to search for appointments based on specific criteria, such as hospital name or clinic, enabling users to quickly find the information they need.</p>
-              <p>Additionally, the website provides functionality for users to update, delete, and insert new appointments, providing flexibility and control over their schedules. This feature is particularly useful for managing changes in appointments or adding new appointments as needed. With this functionality, users can easily make adjustments to their schedules without the need for additional assistance, streamlining the appointment management process. Overall, the website offers a convenient and efficient way for users to manage their appointments across hospitals in Luzon, Visayas, and Mindanao, enhancing the overall experience of both patients and healthcare providers.</p>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section><!-- End About Section -->
-
-    <!-- ======= Services Section ======= -->
-    <section id="services" class="services section-bg">
-      <div class="container" data-aos="fade-up">
-
-        <header class="section-header">
-          <h3>Features</h3>
-        </header>
-
-        <div class="row g-5">
-
-          <div class="col-md-6 col-lg-4 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
-            <div class="box">
-              <div class="icon" style="background: #fceef3;"><i class="bi bi-plus" style="color: #ff689b;"></i></div>
-              <h4 class="title">Add</a></h4>
-              <p class="description">A user is able to add appointments by pressing the top right button in the appointment details area</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-            <div class="box">
-              <div class="icon" style="background: #fff0da;"><i class="bi bi-x" style="color: #e98e06;"></i></div>
-              <h4 class="title">Delete</a></h4>
-              <p class="description">A user is able to delete appointments by pressing the trashbin icon that is seen beside the appointment information </p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-            <div class="box">
-              <div class="icon" style="background: #e6fdfc;"><i class="bi bi-check2" style="color: #3fcdc7;"></i></div>
-              <h4 class="title">Update</a></h4>
-              <p class="description">A user is able to update appointments by pressing the pencil icon that is seen beside the appointment information and edit the neccessary information</p>
-            </div>
-          </div>
-
-      </div>
-
-      </div>
-    </section><!-- End features Section -->
-
-    <!--summary report-->
-    
-    <div class="progress-wrapper">
-      <div class="row1">
-        <div class = "rowItem">
-          <div class="progress blue">
-            <span class="progress-left">
-              <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-              <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">90%</div>
-          </div>
-          <div class="progress-text">Progress 1 - Details for Progress 1</div>
-        </div>
-        
-        <div class = "rowItem">
-          <div class="progress yellow">
-            <span class="progress-left">
-              <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-              <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">90%</div>
-          </div>
-          <div class="progress-text">Progress 1 - Details for Progress 1</div>
-        </div>
-    
-        <div class = "rowItem">
-          <div class="progress red-progress">
-            <span class="progress-left">
-              <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-              <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">90%</div>
-          </div>
-          <div class="progress-text">Progress 1 - Details for Progress 1</div>
-        </div>
-      </div>
-    
-      <div class="row2">
-        <div class = "rowItem">
-          <div class="progress purple-progress">
-            <span class="progress-left">
-              <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-              <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">80%</div>
-          </div>
-          <div class="progress-text">Progress 1 - Details for Progress 1</div>
-        </div>
-
-
-        <div class = "rowItem">
-          <div class="progress green-progress">
-            <span class="progress-left">
-              <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-              <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">90%</div>
-          </div>
-          <div class="progress-text">Progress 1 - Details for Progress 1</div>
-        </div>
-      </div>
-    </div>
-    
-    <!--search form-->
-    <div class  = "services section-bg">
-      <div class="container mt-5" id="formgrey">
-        <h1 style="padding-top: 20px; ">Search Form</h1>
-        <form>
-          <div class="row">
-            <div class="col">
-              <label for="variable1" class="fw-bold">AppId</label>
-              <input type="text" class="form-control underline" id="variable1" placeholder="">
-            </div>
-
-          </div>
- 
-          <div class="row">
-            <div class="col text-center">
-              <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;">Search</button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-    </div>
-    
-    <!-- table -->
+  <!-- Header and Hero Section -->
+  <%- include("./header.ejs") %>
 
   
-    <div class="table">
-      <div class="table-wrapper" style=" padding-top: 20px; padding-left: 10px; padding-right: 10px; border-radius: 5px;">
-          <div class="table-title ">
-              <div class="row">
-                  <div class="col-sm-8"class="form-control underline"><h2>Appointment <b>Details</b></h2></div>
-                  <div class="col-sm-4">
-                      <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
-                  </div>
-              </div>
-          </div>
-          <table class="table table-bordered padding-top: 20px;">
-              <thead>
-                  <tr>
-                      <th>apid</th>
-                      <th>status</th>
-                      <th>Time Queued</th>
-                      <th>Queue Date</th>
-                      <th>Start Time</th>
-                      <th>End time</th>
-                      <th>Type</th>
-                      <th>Virtual/Face-to-face</th>
-                      <th>Major Island</th>
-                      <th>Hospital Name</th>
-                      <th>Hospital/Clinic</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td>John Doe</td>
-                      <td>Administration</td>
-                      <td>(171) 555-2222</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>
-                          <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                          <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                          <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Peter Parker</td>
-                      <td>Customer Service</td>
-                      <td>(313) 555-5735</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>
-                          <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                          <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                          <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Fran Wilson</td>
-                      <td>Human Resources</td>
-                      <td>(503) 555-9931</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>hatdog</td>
-                      <td>
-                          <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                          <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                          <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-          <div class="row">
-            <div class="col-sm-4 offset-sm-8">
-                <div class="d-flex justify-content-end">
-                    <label for="Page-number" style="padding-right: 5px;">Page:</label>
-                    <div class="d-flex justify-content-center" style="padding-right: 5px;">
-                      <input type="text" id="page-number" style="width: 40px; border-radius: 5px; height: 30px; text-align: center;" value="1">
+  <!-- About Section -->
+  <%-include("./about.ejs") %>
+
+      
+  <!-- ======= Services Section ======= -->
+  <%-include("./feature.ejs") %>
+
+
+    <main id="main">
+
+
+          <!-- ======= Stats Counter Section ======= -->
+          <section id="stats-counter" class="stats-counter section-bg">
+            <div class="container">
+              <header class="section-header">
+                <h3>Analytics</h3>
+              </header>
+              <div class="row gy-4 justify-content-center">
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="stats-item d-flex align-items-center w-100 h-100">
+                    <i class="bi bi-clock color-blue flex-shrink-0"></i>
+                    <div>
+                      <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                      <p>Average Consultation Time</p>
                     </div>
-                    <button data-mdb-ripple-color="dark" data-mdb-ripple-init="" class="btn btn-link datatable-pagination-button datatable-pagination-left"><i class="fa fa-chevron-left"></i></button>
-                    <button data-mdb-ripple-color="dark" data-mdb-ripple-init="" class="btn btn-link datatable-pagination-button datatable-pagination-right"><i class="fa fa-chevron-right"></i></button>
-                </div>
+                  </div>
+                </div><!-- End Stats Item -->
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="stats-item d-flex align-items-center w-100 h-100">
+                    <i class="bi bi-person-fill color-orange flex-shrink-0"></i>
+                    <div>
+                      <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                      <p>Average Queue Time</p>
+                    </div>
+                  </div>
+                </div><!-- End Stats Item -->
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="stats-item d-flex align-items-center w-100 h-100">
+                    <i class="bi bi-check-circle-fill color-green flex-shrink-0"></i>
+                    <div>
+                      <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                      <p>Completed Appointments</p>
+                    </div>
+                  </div>
+                </div><!-- End Stats Item -->
+              </div>
+
             </div>
-        </div>
-        
-      </div>
-  </div>
-  
+          </section><!-- End Stats Counter Section -->
+
+          <!-- End features Section -->
+
+          <!--summary report-->
 
 
-  </main><!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="services section-bg">
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong>Pogi ko</strong>. All Rights Reserved
-      </div>
-      <div class="credits">
+          <!--search form-->
+          <div class="my-5" id="search-container">
+            <div class="container">
+              <div>
+                <h2><b>Search</b> an Appointment</h2>
+              </div>
+              <form id="Search-Form" class="p-2">
+                <div>
+                  <label for="variable1" class="fw-bold">AppId</label>
+                  <input type="text" class="form-control underline" id="appointment_id_search" placeholder="">
+                </div>
+                <div class="d-flex justify-content-center m-3">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </form>
+            </div>
+          </div>
 
-        Designed by <a href="https://www.facebook.com/Loouudee?mibextid=eQY6cl">The one and only</a>
-      </div>
-    </div>
-  </footer><!-- End  Footer -->
+          <!-- table -->
 
- 
+          <section class="container appointment-details">
+            <div class="container container-table">
+              <div class="table-title d-flex justify-content-between align-items-center">
+                <div>
+                  <h2 class="mx-1 my-3 container-title">Appointment <b>Details</b></h2>
+                </div>
+                <div>
+                  <div><button type="button" class="btn btn-info add-new">Add New</button></div>
+                  <div><button type="button" class="btn btn-danger back">Back</button></div>
+                </div>
+              </div>
+            </div>
 
-  <!-- Vendor JS Files -->
-  <script defer src="/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script defer src="/vendor/aos/aos.js"></script>
-  <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script defer src="/vendor/glightbox/js/glightbox.min.js"></script>
-  <script defer src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script defer src="/vendor/swiper/swiper-bundle.min.js"></script>
-  <script defer src="/vendor/php-email-form/validate.js"></script>
-  
-  <!-- Template Main JS File -->
-  <script defer src="/js/main.js"></script>
+            <div class="container switch">
+              <table class="table table-hover" id="table-section">
+                <thead>
+                  <tr>
+                    <th>apid</th>
+                    <th>status</th>
+                    <th>Time Queued</th>
+                    <th>Queue Date</th>
+                    <th>Start Time</th>
+                    <th>End time</th>
+                    <th>Type</th>
+                    <th>isVirtual</th>
+                    <th>Major Island</th>
+                    <th>Hospital Name</th>
+                    <th>Hospital/Clinic</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>BDE67BD9610065D068F8EC532FEE8263</td>
+                    <td>Pending</td>
+                    <td>2024-04-10 18:00:00</td>
+                    <td>2024-04-11 16:00:00</td>
+                    <td>2024-04-11 23:00:00</td>
+                    <td>2024-04-11 23:30:00</td>
+                    <td>Checkup</td>
+                    <td>1</td>
+                    <td>Visayas</td>
+                    <td>Central General Hospital</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>BDE67BD9610065D068F8EC532FEE8263</td>
+                    <td>Pending</td>
+                    <td>2024-04-10 18:00:00</td>
+                    <td>2024-04-11 16:00:00</td>
+                    <td>2024-04-11 23:00:00</td>
+                    <td>2024-04-11 23:30:00</td>
+                    <td>Checkup</td>
+                    <td>1</td>
+                    <td>Visayas</td>
+                    <td>Central General Hospital</td>
+                    <td>1</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <form id="addNewAppointment">
+
+                <div class="row mb-2">
+                  <div class="col-md-6 p-1">
+                    <div class="input-group form-floating">
+                      <input type="text" class="form-control" id="app-hospitalname" placeholder="Makati Medical Center">
+                      <label for="app-hospitalname">Hospital Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 p-1">
+                    <div class="input-group form-floating">
+                      <select class="form-select" id="app-region" aria-label="Region">
+                        <!-- RETURN exact name as string -->
+                        <option value="Luzon">Luzon</option>
+                        <option value="Visayas">Visayas</option>
+                        <option value="Mindanao">Mindanao</option>
+                      </select>
+                      <label for="type">Region</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                      <select class="form-select" id="app-status" aria-label="Status">
+                        <!-- RETURN exact name as string -->
+                        <option value="Complete">Complete</option>
+                        <option value="Cancel">Cancel</option>
+                        <option value="Serving">Serving</option>
+                        <option value="NoShow">NoShow</option>
+                        <option value="Skip">Skip</option>
+                      </select>
+                      <label for="app-status">Status</label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                      <select class="form-select" id="app-method" aria-label="Method">
+                        <!-- RETURN 1 if Virtual and 0 if Face-to-Face -->
+                        <option value="1">Virtual</option>
+                        <option value="0">Face-to-Face</option>
+                      </select>
+                      <label for="type">Appointment Method</label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                      <select class="form-select" id="app-type" aria-label="Type">
+                        <option value="Consultation">Consultation</option>
+                        <option value="Inpatient">Inpatient</option>
+                      </select>
+                      <label for="app-type">Appointment Type</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="row p-0 mt-1">
+                      <label for="time_queued" class="form-label">Time Queued:</label>
+                      <div class="col-md-6 p-1">
+                        <input type="date" class="form-control" id="date_queued" name="date_queued">
+                      </div>
+                      <div class="col-md-6 p-1">
+                        <input type="time" class="form-control" id="time_queued" name="time_queued">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="row p-0 mt-1">
+                      <label class="form-label">Queue Date:</label>
+                      <div class="col-md-6 p-1">
+                        <input type="date" class="form-control" id="queue_date" name="queue_date">
+                      </div>
+                      <div class="col-md-6 p-1">
+                        <input type="time" class="form-control" id="queue_time" name="queue_time">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="row p-0 mt-1">
+                      <label class="form-label">Start Time:</label>
+                      <div class="col-md-6 p-1">
+                        <input type="date" class="form-control" id="start_date" name="start_date">
+                      </div>
+                      <div class="col-md-6 p-1">
+                        <input type="time" class="form-control" id="start_time" name="start_time">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="row p-0 mt-1">
+                      <label class="form-label">End Time:</label>
+                      <div class="col-md-6 p-1">
+                        <input type="date" class="form-control" id="end_date" name="end_date">
+                      </div>
+                      <div class="col-md-6 p-1">
+                        <input type="time" class="form-control" id="end_time" name="end_time">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="container mt-3 text-center">
+                  <button type="submit" id="submitAppForm" class="btn btn-primary btn-md py-1 px-3">Submit</button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+
+    </main><!-- End #main -->
+
+    <!-- Footer -->
+    <%- include("./footer.ejs") %>
+
+      <!-- Vendor JS Files -->
+      <script defer src="/vendor/purecounter/purecounter_vanilla.js"></script>
+      <script defer src="/vendor/aos/aos.js"></script>
+      <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <script defer src="/vendor/glightbox/js/glightbox.min.js"></script>
+      <script defer src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+      <script defer src="/vendor/swiper/swiper-bundle.min.js"></script>
+      <script defer src="/vendor/php-email-form/validate.js"></script>
+
+      <!-- Template Main JS File -->
+      <script defer src="/js/main.js"></script>
 
 </body>
 
