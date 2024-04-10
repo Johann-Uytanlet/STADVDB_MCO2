@@ -73,7 +73,7 @@ function getAppointtmentFormData() {
     // Preprocess datetimes
     // TIME QUEUED
     const date_queued = date_queuedElement.value; 
-    const time_queued = time_queued.value; 
+    const time_queued = time_queuedElement.value; 
     let TimeQueued = "";
     TimeQueued += date_queued + " " + time_queued;
 
@@ -108,6 +108,6 @@ function getAppointtmentFormData() {
         StartTime: StartTime,
         EndTime: EndTime,
     };
-  
+    
     return formData;
 };
