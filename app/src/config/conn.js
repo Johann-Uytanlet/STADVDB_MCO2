@@ -3,30 +3,31 @@ const dotenv = require("dotenv").config({path: './conn.env'});
 
 let host, user, password, database, port = [];
 
+
 const node_0 = mysql.createPool({
-    host: process.env.HOST,
-    user: process.env.NODE_0_USER,
-    password: process.env.NODE_0_PASSWORD,
-    database: process.env.NODE_0_DB,
-    port: process.env.NODE_0_PORT,
+    host: 'ccscloud.dlsu.edu.ph',
+    user: 'root',
+    password: 'root',
+    database: 'mco2',
+    port: 20024,
     connectionLimit: 10
 });
 
 const node_1 = mysql.createPool({
-    host: process.env.HOST,
-    user: process.env.NODE_1_USER,
-    password: process.env.NODE_1_PASSWORD,
-    database: process.env.NODE_1_DB,
-    port: process.env.NODE_1_PORT,
+    host: 'ccscloud.dlsu.edu.ph',
+    user: 'root',
+    password: 'root',
+    database: 'mco2',
+    port: 20025,
     connectionLimit: 10
 });
 
 const node_2 = mysql.createPool({
-    host: process.env.HOST,
-    user: process.env.NODE_2_USER,
-    password: process.env.NODE_2_PASSWORD,
-    database: process.env.NODE_2_DB,
-    port: process.env.NODE_2_PORT,
+    host: 'ccscloud.dlsu.edu.ph',
+    user: 'root',
+    password: 'root',
+    database: 'mco2',
+    port: 20026,
     connectionLimit: 10
 });
 
@@ -87,9 +88,9 @@ async function dbQuery(pool, query, content, callback) {
         // Release the database connection back to the pool
         connection.release();
 
-        console.log(result);
-        return result;
-        //return callback(null, result[0]);
+        //console.log(result);
+        //return result;
+        return callback(null, result);
 
 
     } catch (err) {
@@ -101,10 +102,11 @@ async function dbQuery(pool, query, content, callback) {
 
         // Call storeQuery with pool, query, and content
         // to store the query in the logs. Ignores read-only queries
+        /*
         let query_type = query.split(" ")[0];
         if (process.env.NODE_NUM_CONFIGURATION != -1 && query_type != "SELECT") {
             await storeQuery(pool, query, content);
-        } 
+        } */
 
         callback(err);
 
@@ -163,5 +165,9 @@ function gracefulShutdown (pool) {
         console.log('Shutting down gracefully');
     });
 };
+
+//getConnection(node_0);
+//getConnection(node_1);
+//getConnection(node_2)
 
 module.exports = { node_0, node_1, node_2, dbQuery, getConnection };
