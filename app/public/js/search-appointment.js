@@ -132,124 +132,144 @@ function editEventListener(button){
 
     button.addEventListener("click", (e) => {
         e.preventDefault();
+
         const apptid = button.closest('tr').querySelector('#apptid').textContent;
 
         const editFormHTML = `
+        <div class="editFormContainer">
+            <div class="table-title d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mx-1 my-3 container-title">Edit <b>Appointment</b></h2>
+                </div>
+                <div>
+                    <div><button type="button" class="btn btn-danger add-new-edit">Back</button></div>
+                </div>
+            </div>
+
             <form id="editAppointmentForm">
-            <div class="row mb-2">
-                <div class="col-md-6 p-1">
-                    <div class="input-group form-floating">
-                    <input type="text" class="form-control" id="app-hospitalname-edit" placeholder="Makati Medical Center">
-                    <label for="app-hospitalname">Hospital Name</label>
+                <div class="row mb-2">
+                    <div class="col-md-6 p-1">
+                        <div class="input-group form-floating">
+                        <input type="text" class="form-control" id="app-hospitalname-edit" placeholder="Makati Medical Center">
+                        <label for="app-hospitalname">Hospital Name</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6 p-1">
-                    <div class="input-group form-floating">
-                    <select class="form-select" id="app-region-edit" aria-label="Region">
-                        <!-- RETURN exact name as string -->
-                        <option value="Luzon">Luzon</option>
-                        <option value="Visayas">Visayas</option>
-                        <option value="Mindanao">Mindanao</option>
-                    </select>
-                    <label for="type">Region</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-md-4 p-1">
-                    <div class="input-group form-floating">
-                        <select class="form-select" id="app-status-edit" aria-label="Status">
+                    <div class="col-md-6 p-1">
+                        <div class="input-group form-floating">
+                        <select class="form-select" id="app-region-edit" aria-label="Region">
                             <!-- RETURN exact name as string -->
-                            <option value="Complete">Complete</option>
-                            <option value="Cancel">Cancel</option>
-                            <option value="Serving">Serving</option>
-                            <option value="NoShow">NoShow</option>
-                            <option value="Skip">Skip</option>
+                            <option value="Luzon">Luzon</option>
+                            <option value="Visayas">Visayas</option>
+                            <option value="Mindanao">Mindanao</option>
                         </select>
-                        <label for="app-status">Status</label>
+                        <label for="type">Region</label>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 p-1">
-                    <div class="input-group form-floating">
-                        <select class="form-select" id="app-method-edit" aria-label="Method">
-                            <!-- RETURN 1 if Virtual and 0 if Face-to-Face -->
-                            <option value="1">Virtual</option>
-                            <option value="0">Face-to-Face</option>
-                        </select>
-                        <label for="type">Appointment Method</label>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="input-group form-floating">
-                        <select class="form-select" id="app-type-edit" aria-label="Type">
-                            <option value="Consultation">Consultation</option>
-                            <option value="Inpatient">Inpatient</option>
-                        </select>
-                        <label for="app-type">Appointment Type</label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col">
-                    <div class="row p-0 mt-1">
-                        <label for="time_queued" class="form-label">Time Queued:</label>
-                        <div class="col-md-6 p-1">
-                            <input type="date" class="form-control" id="date_queued-edit" name="date_queued">
+                <div class="row mb-2">
+                    <div class="col-md-4 p-1">
+                        <div class="input-group form-floating">
+                            <select class="form-select" id="app-status-edit" aria-label="Status">
+                                <!-- RETURN exact name as string -->
+                                <option value="Complete">Complete</option>
+                                <option value="Cancel">Cancel</option>
+                                <option value="Serving">Serving</option>
+                                <option value="NoShow">NoShow</option>
+                                <option value="Skip">Skip</option>
+                            </select>
+                            <label for="app-status">Status</label>
                         </div>
-                        <div class="col-md-6 p-1">
-                            <input type="time" class="form-control" id="time_queued-edit" name="time_queued">
+                    </div>
+                    <div class="col-md-4 p-1">
+                        <div class="input-group form-floating">
+                            <select class="form-select" id="app-method-edit" aria-label="Method">
+                                <!-- RETURN 1 if Virtual and 0 if Face-to-Face -->
+                                <option value="1">Virtual</option>
+                                <option value="0">Face-to-Face</option>
+                            </select>
+                            <label for="type">Appointment Method</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 p-1">
+                        <div class="input-group form-floating">
+                            <select class="form-select" id="app-type-edit" aria-label="Type">
+                                <option value="Consultation">Consultation</option>
+                                <option value="Inpatient">Inpatient</option>
+                            </select>
+                            <label for="app-type">Appointment Type</label>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="row p-0 mt-1">
-                        <label class="form-label">Queue Date:</label>
-                        <div class="col-md-6 p-1">
-                            <input type="date" class="form-control" id="queue_date-edit" name="queue_date">
-                        </div>
-                        <div class="col-md-6 p-1">
-                            <input type="time" class="form-control" id="queue_time-edit" name="queue_time">
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col">
-                    <div class="row p-0 mt-1">
-                        <label class="form-label">Start Time:</label>
-                        <div class="col-md-6 p-1">
-                            <input type="date" class="form-control" id="start_date-edit" name="start_date">
+                <div class="row">
+                    <div class="col">
+                        <div class="row p-0 mt-1">
+                            <label for="time_queued" class="form-label">Time Queued:</label>
+                            <div class="col-md-6 p-1">
+                                <input type="date" class="form-control" id="date_queued-edit" name="date_queued">
+                            </div>
+                            <div class="col-md-6 p-1">
+                                <input type="time" class="form-control" id="time_queued-edit" name="time_queued">
+                            </div>
                         </div>
-                        <div class="col-md-6 p-1">
-                            <input type="time" class="form-control" id="start_time-edit" name="start_time">
+                    </div>
+                    <div class="col">
+                        <div class="row p-0 mt-1">
+                            <label class="form-label">Queue Date:</label>
+                            <div class="col-md-6 p-1">
+                                <input type="date" class="form-control" id="queue_date-edit" name="queue_date">
+                            </div>
+                            <div class="col-md-6 p-1">
+                                <input type="time" class="form-control" id="queue_time-edit" name="queue_time">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="row p-0 mt-1">
-                        <label class="form-label">End Time:</label>
-                        <div class="col-md-6 p-1">
-                            <input type="date" class="form-control" id="end_date-edit" name="end_date">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="row p-0 mt-1">
+                            <label class="form-label">Start Time:</label>
+                            <div class="col-md-6 p-1">
+                                <input type="date" class="form-control" id="start_date-edit" name="start_date">
+                            </div>
+                            <div class="col-md-6 p-1">
+                                <input type="time" class="form-control" id="start_time-edit" name="start_time">
+                            </div>
                         </div>
-                        <div class="col-md-6 p-1">
-                            <input type="time" class="form-control" id="end_time-edit" name="end_time">
+                    </div>
+                    <div class="col">
+                        <div class="row p-0 mt-1">
+                            <label class="form-label">End Time:</label>
+                            <div class="col-md-6 p-1">
+                                <input type="date" class="form-control" id="end_date-edit" name="end_date">
+                            </div>
+                            <div class="col-md-6 p-1">
+                                <input type="time" class="form-control" id="end_time-edit" name="end_time">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="container mt-3 text-center">
-                <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Edit Appointment</button>
-            </div>
+                <div class="container mt-3 text-center">
+                    <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Edit Appointment</button>
+                </div>
 
-        </form>
+            </form>
+        </div>
         `;
 
         displaySearchedAppointment.innerHTML += editFormHTML;
+
+        const editAppointmentContainer = document.getElementById('editFormContainer');
+
+        const backButton = document.querySelector('.add-new-edit');
+
+        backButton.addEventListener('click', () => {
+            editAppointmentContainer.style.display = 'none'; // Hide the container
+        });
 
         const editAppointmentForm = document.getElementById('editAppointmentForm');
 
