@@ -3,6 +3,7 @@ const searchSubmitBtn = document.querySelector("#search-btn");
 const inputSearch = document.querySelector("#appointment_id_search");
 const displaySearchedAppointment = document.querySelector(".display-searched-appointment");
 
+let searchResults = {};
 
 searchSubmitBtn.addEventListener("click", (event) => {
     event.preventDefault();
@@ -10,14 +11,14 @@ searchSubmitBtn.addEventListener("click", (event) => {
     const notAllFoundMessage = document.querySelectorAll(".id-notfound");
 
     // RESET
-    if (getAllCurrentSearch != null ) {
+    if (getAllCurrentSearch != null) {
         getAllCurrentSearch.forEach(element => {
             element.remove();
         });
-    }    
-    
-    if (notAllFoundMessage != null ) {
-      
+    }
+
+    if (notAllFoundMessage != null) {
+
         notAllFoundMessage.forEach(element => {
             element.remove();
         });
@@ -64,7 +65,7 @@ searchSubmitBtn.addEventListener("click", (event) => {
             </thead>
             <tbody>
             <tr>
-            <td>${result.apptid}</td>
+            <td id="apptid">${result.apptid}</td>
             <td>${result.status}</td>
             <td>${result.TimeQueued}</td>
             <td>${result.QueueDate}</td>
@@ -76,19 +77,232 @@ searchSubmitBtn.addEventListener("click", (event) => {
             <td>${result.hospitalname}</td>
             <td>${result.IsHospital}</td>
             <td>
-                        <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                        <a class="delete" title="Delete" data-toggle="tooltip"><i
-                            class="material-icons">&#xE872;</i></a>
-                      </td>
+                        <button class="edit">
+                            <a title="Edit">
+                                <i class="material-icons">&#xE254;</i>
+                            </a>
+                        </button>
+                        <button class="delete">
+                            <a title="Delete" >
+                                <i class="material-icons">&#xE872;</i>
+                            </a>
+                        </button>
+            </td>
             </tr>
             </tbody>
             </table>
         
             `;
+
+            searchResults = result;
+
             displaySearchedAppointment.innerHTML += html;
+
+            const deleteButtons = document.querySelectorAll(".delete");
+            deleteButtons.forEach(button => {
+                deleteEventListener(button);
+            });
+
+            const editButtons = document.querySelectorAll(".edit");
+            editButtons.forEach(button => {
+                editEventListener(button);
+            });
+
+
         } else {
             const html = `<p class='id-notfound'> No appointment found using: ${appID} </p>`;
             displaySearchedAppointment.innerHTML += html;
         }
     })
 })
+
+function editEventListener(button){
+
+    // get table 
+
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const apptid = button.closest('tr').querySelector('#apptid').textContent;
+
+        const editFormHTML = `
+            <form id="editAppointmentForm">
+            <div class="row mb-2">
+                <div class="col-md-6 p-1">
+                    <div class="input-group form-floating">
+                    <input type="text" class="form-control" id="app-hospitalname-edit" placeholder="Makati Medical Center">
+                    <label for="app-hospitalname">Hospital Name</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 p-1">
+                    <div class="input-group form-floating">
+                    <select class="form-select" id="app-region-edit" aria-label="Region">
+                        <!-- RETURN exact name as string -->
+                        <option value="Luzon">Luzon</option>
+                        <option value="Visayas">Visayas</option>
+                        <option value="Mindanao">Mindanao</option>
+                    </select>
+                    <label for="type">Region</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                        <select class="form-select" id="app-status-edit" aria-label="Status">
+                            <!-- RETURN exact name as string -->
+                            <option value="Complete">Complete</option>
+                            <option value="Cancel">Cancel</option>
+                            <option value="Serving">Serving</option>
+                            <option value="NoShow">NoShow</option>
+                            <option value="Skip">Skip</option>
+                        </select>
+                        <label for="app-status">Status</label>
+                    </div>
+                </div>
+                <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                        <select class="form-select" id="app-method-edit" aria-label="Method">
+                            <!-- RETURN 1 if Virtual and 0 if Face-to-Face -->
+                            <option value="1">Virtual</option>
+                            <option value="0">Face-to-Face</option>
+                        </select>
+                        <label for="type">Appointment Method</label>
+                    </div>
+                </div>
+                <div class="col-md-4 p-1">
+                    <div class="input-group form-floating">
+                        <select class="form-select" id="app-type-edit" aria-label="Type">
+                            <option value="Consultation">Consultation</option>
+                            <option value="Inpatient">Inpatient</option>
+                        </select>
+                        <label for="app-type">Appointment Type</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="row p-0 mt-1">
+                        <label for="time_queued" class="form-label">Time Queued:</label>
+                        <div class="col-md-6 p-1">
+                            <input type="date" class="form-control" id="date_queued-edit" name="date_queued">
+                        </div>
+                        <div class="col-md-6 p-1">
+                            <input type="time" class="form-control" id="time_queued-edit" name="time_queued">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row p-0 mt-1">
+                        <label class="form-label">Queue Date:</label>
+                        <div class="col-md-6 p-1">
+                            <input type="date" class="form-control" id="queue_date-edit" name="queue_date">
+                        </div>
+                        <div class="col-md-6 p-1">
+                            <input type="time" class="form-control" id="queue_time-edit" name="queue_time">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="row p-0 mt-1">
+                        <label class="form-label">Start Time:</label>
+                        <div class="col-md-6 p-1">
+                            <input type="date" class="form-control" id="start_date-edit" name="start_date">
+                        </div>
+                        <div class="col-md-6 p-1">
+                            <input type="time" class="form-control" id="start_time-edit" name="start_time">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row p-0 mt-1">
+                        <label class="form-label">End Time:</label>
+                        <div class="col-md-6 p-1">
+                            <input type="date" class="form-control" id="end_date-edit" name="end_date">
+                        </div>
+                        <div class="col-md-6 p-1">
+                            <input type="time" class="form-control" id="end_time-edit" name="end_time">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-3 text-center">
+                <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Submit</button>
+            </div>
+
+        </form>
+        `;
+
+        displaySearchedAppointment.innerHTML += editFormHTML;
+
+        const editAppointmentForm = document.getElementById('editAppointmentForm');
+
+        const regionElement = document.getElementById('app-region-edit');
+        const hospitalNameElement = document.getElementById('app-hospitalname-edit');
+        const statusElement = document.getElementById('app-status-edit');
+        const methodElement = document.getElementById('app-method-edit');
+        const typeElement = document.getElementById('app-type-edit');
+
+        const date_queuedElement = document.getElementById('date_queued-edit');
+        const time_queuedElement = document.getElementById('time_queued-edit');
+        const queue_dateElement = document.getElementById('queue_date-edit');
+        const queue_timeElement = document.getElementById('queue_time-edit');
+        const start_dateElement = document.getElementById('start_date-edit');
+        const start_timeElement = document.getElementById('start_time-edit');
+        const end_dateElement = document.getElementById('end_date-edit');
+        const end_timeElement = document.getElementById('end_time-edit');
+
+        regionElement.value = searchResults.MajorIsland;
+        hospitalNameElement.innerText = searchResults.hospitalname;
+        statusElement.value = searchResults.status;
+        methodElement.value = searchResults.IsVirtual === 1 ? 'Virtual' : 'Face-to-Face';
+        typeElement.value = searchResults.type;
+
+
+        // try {
+        //     fetch('/updateAppointment', {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application.json",
+        //         },
+        //         body: JSON.stringify({ apptid: apptid })
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => console.log(data))
+        //     .catch(error => console.log(error));
+        // } catch (error) {
+        //     console.log(error);
+        // }
+    });
+}
+
+function deleteEventListener(button) {
+    button.addEventListener("click", (event) => {
+        event.preventDefault();
+        // Access the apptid associated with this delete button
+        const apptid = button.closest('tr').querySelector('#apptid').textContent;
+        // Perform your delete action here using the apptid
+        console.log("Delete button clicked for apptid:", apptid);
+
+        try {
+            fetch('/deleteAppointment', {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ apptid: apptid })
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error));
+        } catch (e) {
+
+        }
+    });
+}

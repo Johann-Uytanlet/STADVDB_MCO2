@@ -1,8 +1,60 @@
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv").config({path: './conn.env'});
 
-let host, user, password, database, port = [];
+// let host, user, password, database, port = [];
 
+// For now, now_num is hardcoded here. It determines which node the current user is on.
+const node_num = 0;
+
+function switchConnection (node_num) {
+    switch (node_num) {
+        case 0:
+            node_host = 'ccscloud.dlsu.edu.ph';
+            node_user = 'root';
+            node_password = 'root';
+            node_database = 'mco2';
+            node_port = 20024;
+            node_connectionLimit = 10;
+            break;
+        case 1:
+            node_host = 'ccscloud.dlsu.edu.ph';
+            node_user = 'root';
+            node_password = 'root';
+            node_database = 'mco2';
+            node_port = 20025;
+            node_connectionLimit = 10;
+            break;
+        case 2:
+            node_host = 'ccscloud.dlsu.edu.ph';
+            node_user = 'root';
+            node_password = 'root';
+            node_database = 'mco2';
+            node_port = 20026;
+            node_connectionLimit = 10;
+            break;
+        default:
+            node_host = 'ccscloud.dlsu.edu.ph';
+            node_user = 'root';
+            node_password = 'root';
+            node_database = 'mco2';
+            node_port = 20024;
+            node_connectionLimit = 10;
+            break;
+    }
+}
+
+
+
+switchConnection(node_num);
+
+const current_node = mysql.createPool({
+    host: node_host,
+    user: node_user,
+    password: node_password,
+    database: node_database,
+    port: node_port,
+    connectionLimit: 10,
+});
 
 const node_0 = mysql.createPool({
     host: 'ccscloud.dlsu.edu.ph',
@@ -239,4 +291,4 @@ function gracefulShutdown (pool) {
 //getConnection(node_1);
 //getConnection(node_2)
 
-module.exports = { node_0, node_1, node_2, dbQuery, getConnection };
+module.exports = { current_node, node_0, node_1, node_2, dbQuery, getConnection };

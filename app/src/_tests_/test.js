@@ -44,33 +44,33 @@ async function main(){
     // Insert
 
     
-    const testData = {
-        body: {
-          status: "Complete",
-          TimeQueued: new Date("2024-04-10T10:00:00.000Z"), // Replace with your desired date and time
-          QueueDate: new Date("2024-04-11T08:00:00.000Z"), // Replace with your desired date and time
-          StartTime: new Date("2024-04-11T15:00:00.000Z"), // Replace with your desired date and time
-          EndTime: new Date("2024-04-11T15:30:00.000Z"), // Replace with your desired date and time
-          type: "Consultation",
-          IsVirtual: 1,
-          MajorIsland: "Luzon",
-          hospitalname: "Central General Hospital",
-          IsHospital: 1
-        }
-      };
+    // const testData = {
+    //     body: {
+    //       status: "Complete",
+    //       TimeQueued: new Date("2024-04-10T10:00:00.000Z"), // Replace with your desired date and time
+    //       QueueDate: new Date("2024-04-11T08:00:00.000Z"), // Replace with your desired date and time
+    //       StartTime: new Date("2024-04-11T15:00:00.000Z"), // Replace with your desired date and time
+    //       EndTime: new Date("2024-04-11T15:30:00.000Z"), // Replace with your desired date and time
+    //       type: "Consultation",
+    //       IsVirtual: 1,
+    //       MajorIsland: "Luzon",
+    //       hospitalname: "Central General Hospital",
+    //       IsHospital: 1
+    //     }
+    //   };
     
-    res = {};
-    await controller.addAppointment(testData, res);
-    console.log(res);
+    // res = {};
+    // await controller.addAppointment(testData, res);
+    // console.log(res);
     
 
-    /* // testing delete
-    req = {body: '000019E8D2903D7A8D69B782507287E7'};
+    // testing delete
+    req = {body: '73ED5F3C948786826AE26A446D12A727'};
     res = {};
     await controller.deleteNodeDB(req, res);
     try{console.log(res.result[0].affectedRows);}
     catch{console.log("NOOOO");}
-    */
+    
 
 
     /*

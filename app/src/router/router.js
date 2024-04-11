@@ -16,5 +16,6 @@ router.post('/getAppointment', controller.searchAppointment);
 // POST
 router.post('/addAppointment', controller.addAppointment);
 router.post('/updateAppointment', controller.updateAppointment);
+router.delete("/deleteAppointment", controller.deleteNodeDB);
 
 module.exports = router;

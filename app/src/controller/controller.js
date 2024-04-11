@@ -1,5 +1,5 @@
-const { node_0, node_1, node_2, dbQuery, getConnection } = require('../config/conn.js');
-
+const { current_node, node_0, node_1, node_2, dbQuery, getConnection } = require('../config/conn.js');
+const helper = require("./helper.js");
 
 // TODO: Replace the if-else statements in the (err, result) anonymous functions to respond with the appropriate status codes and data.
 /*
@@ -8,22 +8,6 @@ const { node_0, node_1, node_2, dbQuery, getConnection } = require('../config/co
 */
 const mysql = require("mysql2");
 const conn = require("../config/conn.js");
-
-function generateRandomHexString(length) {
-    const characters = '0123456789ABCDEF';
-    let result = '';
-    const charactersLength = characters.length;
-
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-
-    return result;
-}
-
-function generateHexStringApptid() {
-    return generateRandomHexString(32);
-}
 
 const controller = {
 
@@ -68,21 +52,15 @@ const controller = {
                 pageNum = 1;
                 limit = pageNum * 10;
 
-                sql = `
-                SELECT *
-                FROM node0_db
-                LIMIT ${limit};
-                `;
+                sql = `SELECT * FROM node0_db LIMIT ${limit};`;
 
-
-                viewPartialAppointments = await dbQuery(node_0, sql, content, (err, result) => {
+                viewPartialAppointments = await dbQuery(current_node, sql, content, (err, result) => {
                     if (err) {
                         console.log(err);
                     } else {
                         return result[0];
                     }
                 });
-
 
                 viewPartialAppointments.forEach(item => {
                     if (item.TimeQueued !== null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
@@ -99,21 +77,15 @@ const controller = {
                 limit = 10;
                 offset = (pageNum - 1) * limit;
 
-                sql = `
-                SELECT *
-                FROM node0_db
-                LIMIT ${limit}
-                OFFSET ${offset};
-                `;
+                sql = `SELECT * FROM node0_db LIMIT ${limit} OFFSET ${offset};`;
 
-                viewPartialAppointments = await dbQuery(node_0, sql, content, (err, result) => {
+                viewPartialAppointments = await dbQuery(current_node, sql, content, (err, result) => {
                     if (err) {
                         console.log(err);
                     } else {
                         return result[0];
                     }
                 });
-
 
                 viewPartialAppointments.forEach(item => {
                     if (item.TimeQueued !== null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
@@ -122,17 +94,13 @@ const controller = {
                     if (item.EndTime !== null) { item.EndTime = item.EndTime.toLocaleString(); }
                 });
 
-
                 const numAppointment = viewPartialAppointments.length;
 
                 console.log(viewPartialAppointments);
 
                 res.status(201).json({ viewApp: viewPartialAppointments});
             }
-
             console.log(pageNum);
-
-
         }
         catch (e) {
             console.log("controller.js error");
@@ -145,102 +113,84 @@ const controller = {
 
         const sql = `SELECT COUNT(*) AS count FROM node0_db WHERE apptid = \'${apptid}\';`;
 
-        //console.log(sql);
-
-        await dbQuery(node_0, sql, apptid, (err, result) => {
+        await dbQuery(current_node, sql, apptid, (err, result) => {
             if (err) {
                 console.log(err);
-                //console.log("inside");
             } else {
-                //console.log(result);
-                //console.log("inside2");
                 res.result = result;
                 return result;
             }
         });
-        //console.log("outside");
     },
 
     searchAppointment: async (req, res) => {
-
         try {
             const apptid = req.body.apptid;
 
-            const sql = `
-                SELECT *
-                FROM node0_db
-                WHERE apptid = '${apptid}';
-                `;
+            const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';`;
 
-            console.log(sql);
-
-            conn.dbQuery(node_0, sql, apptid, (err, result) => {
+            await conn.dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
                 } else {
                     if (result[0].length > 0) {
-                        console.log(result)
                         const appointment = result[0];
                         res.status(200).json(appointment[0]);
                     } else {
-                        console.log(result)
+                        console.log("no")
                         res.status(200).json([]);
                     }
                 }
             });
-
-            // console.log(appointment[0]);
 
         } catch (error) {
             console.log(error);
         }
     },
 
-    searchAppointment_server1: async (req, res) => {
-        const apptid = req.body;
+    // searchAppointment_server1: async (req, res) => {
+    //     const apptid = req.body;
 
-        const sql = `SELECT * FROM node1_db WHERE apptid = '${apptid}';
-        `;
+    //     const sql = `SELECT * FROM node1_db WHERE apptid = '${apptid}';
+    //     `;
 
-        //console.log(sql);
+    //     await dbQuery(node_1, sql, apptid, (err, result) => {
+    //         if (err) {
+    //             console.log(err);
+    //             console.log("inside");
+    //             res.result = err;
+    //         } else {
+    //             //console.log(result);
+    //             //console.log("inside2");
+    //             res.result = result;
+    //             return result;
+    //         }
+    //     });
+    //     //console.log("outside");
+    // },
 
-        await dbQuery(node_1, sql, apptid, (err, result) => {
-            if (err) {
-                console.log(err);
-                console.log("inside");
-                res.result = err;
-            } else {
-                //console.log(result);
-                //console.log("inside2");
-                res.result = result;
-                return result;
-            }
-        });
-        //console.log("outside");
-    },
+    // searchAppointment_server2: async (req, res) => {
+    //     const apptid = req.body;
 
-    searchAppointment_server2: async (req, res) => {
-        const apptid = req.body;
+    //     const sql = `SELECT * FROM node2_db WHERE apptid = '${apptid}';
+    //     `;
 
-        const sql = `SELECT * FROM node2_db WHERE apptid = '${apptid}';
-        `;
+    //     //console.log(sql);
 
-        //console.log(sql);
-
-        await dbQuery(node_2, sql, apptid, (err, result) => {
-            if (err) {
-                console.log(err);
-                console.log("inside");
-                res.result = err;
-            } else {
-                //console.log(result);
-                //console.log("inside2");
-                res.result = result;
-                return result;
-            }
-        });
-        //console.log("outside");
-    },
+    //     await dbQuery(node_2, sql, apptid, (err, result) => {
+    //         if (err) {
+    //             console.log(err);
+    //             console.log("inside");
+    //             res.result = err;
+    //         } else {
+    //             //console.log(result);
+    //             //console.log("inside2");
+    //             res.result = result;
+    //             return result;
+    //         }
+    //     });
+    //     //console.log("outside");
+    // },
 
     updateAppointment: async (req, res) => {
         // Build the SET clause dynamically, ensuring valid fields and data types
@@ -291,15 +241,12 @@ const controller = {
 
             const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
           
-            await dbQuery(node_0, sql, apptid, (err, result) => {
+            await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
-                    //console.log("inside");
                 } else {
                     console.log(result);
-                    //console.log("inside2");
                     res.result = result;
-                    //return result;
                 }
             }
             );
@@ -308,9 +255,8 @@ const controller = {
             //console.log(res1.result[0][0].MajorIsland)
 
             if (res1.result[0][0].MajorIsland == 'Luzon') {
-                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';
-        `;
-                await dbQuery(node_0, sql, apptid, (err, result) => {
+                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+                await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
                         //console.log("inside");
@@ -325,7 +271,7 @@ const controller = {
             } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
                 const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
 
-                await dbQuery(node_0, sql, apptid, (err, result) => {
+                await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
                         //console.log("inside");
@@ -347,16 +293,13 @@ const controller = {
             type, IsVirtual, MajorIsland, hospitalname, IsHospital
         } = req.body;
 
-        console.log(req.body);
-
-        console.log({ status, TimeQueued, QueueDate, StartTime, EndTime,
-            type, IsVirtual, MajorIsland, hospitalname, IsHospital});
+        // console.log(req.body);
 
         let apptid;
         let unique = 1;
 
         while (unique != 0) {
-            apptid = generateHexStringApptid();
+            apptid = helper.generateHexStringApptid();
             req1 = { body: apptid };
             res1 = {};
             await controller.isApptidUnique(req1, res1);
@@ -379,24 +322,19 @@ const controller = {
         };
 
         // Format date and time fields
-        formattedTimeQueued = formatDateTime(TimeQueued);
-        formattedQueueDate = formatDateTime(QueueDate);
-        formattedStartTime = formatDateTime(StartTime);
-        formattedEndTime = formatDateTime(EndTime);
+        const formattedTimeQueued = formatDateTime(TimeQueued);
+        const formattedQueueDate = formatDateTime(QueueDate);
+        const formattedStartTime = formatDateTime(StartTime);
+        const formattedEndTime = formatDateTime(EndTime);
 
-        const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
-        `;
+        const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
-        await dbQuery(node_0, sql, apptid, (err, result) => {
+        await dbQuery(current_node, sql, apptid, (err, result) => {
             if (err) {
                 console.log(err);
-                //console.log("inside");
             } else {
-                //console.log(result);
-                //console.log("inside2");
                 res.result = result;
                 res.id = apptid;
-                //return result;
             }
         });
 
@@ -404,67 +342,67 @@ const controller = {
 
             const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
-            await dbQuery(node_0, sql, apptid, (err, result) => {
+            await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
                     //console.log("inside");
                 } else {
-                    console.log(result);
-                    console.log("Luzon");
-                    return res.status(201).json({ message: "Appointment created", apptid: result.apptid });
+                    // console.log(apptid);
+                     console.log("Luzon");
+                    return res.status(201).json({ message: "Appointment created", apptid: apptid });
                 }
             });
+
         } else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
 
-            const sql = `
-            INSERT INTO node2_db 
-            (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)
-            VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', 
-            \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});
-            `;
+            const sql = `INSERT INTO node2_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
-            await dbQuery(node_0, sql, apptid, (err, result) => {
+            await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
                     console.log(err);
                     //console.log("inside");
                 } else {
                     //console.log(result);
                     console.log("Visayas/Mindanao");
-                    return res.status(201).json({ message: "Appointment created", apptid: result.apptid });
+                    return res.status(201).json({ message: "Appointment created", apptid: apptid  });
                 }
             });
         }
     },
 
     deleteNodeDB: async (req, res) => {
+        console.log("DELETE FUNCTION");
         const apptid = req.body;
 
-        req1 = { body: apptid }
-        res1 = {}
-        await controller.searchAppointment(req1, res1);
+        const appointment = await helper.searchById(apptid.apptid);
+                
+        // console.log(appointment[0].apptid);
+        // console.log(appointment.length)
 
-        if (res1.result[0].length > 0) {
-            const sql = `DELETE FROM node0_db WHERE apptid = '${apptid}';`;
+        if (appointment.length > 0) {
+            const sql = `DELETE FROM node0_db WHERE apptid = '${appointment[0].apptid}';`;
 
-            await dbQuery(node_0, sql, apptid, (err, result) => {
+            await dbQuery(current_node, sql, {}, (err, result) => {
                 if (err) {
                     console.log(err);
                     //console.log("inside");
                 } else {
-                    console.log(result);
+                    console.log("deleted");
                     //console.log("inside2");
+                    console.log(result);
                     res.result = result;
                     //return result;
                 }
             }
             );
+        }
 
-            //console.log("before")
-            //console.log(res1.result[0][0].MajorIsland)
+        //     //console.log("before")
+        //     //console.log(res1.result[0][0].MajorIsland)
 
-            if (res1.result[0][0].MajorIsland == 'Luzon') {
+            if (appointment.MajorIsland == 'Luzon') {
                 const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}';`;
-                await dbQuery(node_0, sql, apptid, (err, result) => {
+                await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);
                         //console.log("inside");
@@ -476,9 +414,9 @@ const controller = {
                     }
                 }
                 );
-            } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
+            } else if (appointment.MajorIsland == 'Visayas' || appointment.MajorIsland == 'Mindanao') {
                 const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}';`;
-                await dbQuery(node_0, sql, apptid, (err, result) => {
+                await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);
                         //console.log("inside");
@@ -491,13 +429,12 @@ const controller = {
                 }
                 );
             }
-        }
-    },
+        },
 
     avg_consultation_time: async (req, res) => {
         const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time FROM node0_db;`;
 
-        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+        await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
             } else {
@@ -505,13 +442,15 @@ const controller = {
             }
         }
         );
-    }, avg_queue_time: async (req, res) => {
+    }, 
+    
+    avg_queue_time: async (req, res) => {
         const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time FROM node0_db;`;
 
         result = {}
         result2 = {}
 
-        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+        await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
             } else {
@@ -520,12 +459,14 @@ const controller = {
             }
         }
         );
-    }, completed_over_total: async (req, res) => {
+    },
+    
+    completed_over_total: async (req, res) => {
         var sql = `SELECT COUNT(*) as total FROM node0_db;`;
         okay = false;
         okay2 = false;
 
-        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+        await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
                 //console.log("inside");
@@ -540,7 +481,7 @@ const controller = {
         }
         );
         sql = `SELECT COUNT(*) as total FROM node0_db WHERE status = 'Complete';`;
-        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+        await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);
                 //console.log("inside");
@@ -563,11 +504,8 @@ const controller = {
         }
     },
 
+    
+
 };
 
-
-req = { body: '000019E8D2903D7A8D69B782507287E7' };
-res = {};
-//controller.searchAppointment(req, res);
-//controller.isApptidUnique(req, res);
 module.exports = controller;

@@ -41,31 +41,29 @@ async function fetchPost(endpoint, formData) {
  */
 addAppointmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    //console.log("INSIDE EVENT LISTENER OUTSIDE TRY CATCH");
+    const showMessage = document.querySelector(".show-insert-status")
+
     try {
         const appointmentFormData = await getAppointtmentFormData();
-        const appointmentResponse = await fetchPost('/addAppointment', appointmentFormData)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.apptid); // Log the response data
-                return data; // Return the response data
+
+        await fetchPost('/addAppointment', appointmentFormData)
+            .then(response => {
+                if (response.status == 201) {
+                    return response.json();
+                } else {
+                    alert('Error in adding appointment.');
+                }
             })
-            .catch(error => {
-                console.error('Error fetching appointment data:', error);
-                return null; // Return null or handle the error as needed
-            });
-
-        //console.log("INSIDE EVENT LISTENER");
-        // console.log(appointmentResponse.apptid);
-
-        // if (appointmentResponse.status == 201) {
-        //     alert('Appointment Successfully Added.');
-        //     console.log('Appointment Successfully Added.');
-        //     console.log(data.apptid)
-        // } else {
-        //     alert('Error in adding appointment.');
-        //     console.log('Error in adding appointment.');
-        // }
+            .then(data => {
+                if(data.apptid != null){
+                    const html = `<p class="m-0">Successfully Added Appointment: ${data.apptid} </p>`;
+                    showMessage.innerHTML = "";
+                    showMessage.classList.add("success");
+                    showMessage.innerHTML += html;
+                } else {
+                    alert(`Error in adding appointment`)
+                }
+            })
 
     } catch (error) {
         //alert(error);

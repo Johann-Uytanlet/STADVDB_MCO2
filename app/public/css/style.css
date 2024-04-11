@@ -1,5 +1,4 @@
 
-
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -80,6 +79,10 @@ h6 {
   [data-aos-delay] {
     transition-delay: 0 !important;
   }
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
 }
 
 /*--------------------------------------------------------------
@@ -927,6 +930,22 @@ Forms and Table
   display: block;
   scrollbar-width: 5px;
 }
+
+.success{
+  color: green;
+  font-weight: 600;
+  border: green 2px solid;
+  text-align: center;
+}
+
+.error{
+  color: red;
+  font-weight: 600;
+  border: red 2px solid;
+  text-align: center;
+  padding: 10px 0;
+}
+
 
 .next-page-section{
   display: block;

@@ -6,6 +6,7 @@ const toggleTableSection = document.querySelector("#table-section");
 const addForm = document.querySelector("#addNewAppointment");
 const containerTitle = document.querySelector(".container-title");
 const nextpageSection = document.querySelector(".next-page-section");
+const showMessage = document.querySelector(".show-insert-status")
 
 addAppBtn.addEventListener("click", () => {
     toggleTableSection.style.display = "none";
@@ -26,6 +27,8 @@ backFormBtn.addEventListener("click", () => {
     containerTitle.innerHTML = "Appointment <b>Details</b>"
     nextpageSection.style.display = "block";
     nextpageSection.classList.add('d-flex');
+    showMessage.innerHTML = "";
+    showMessage.classList.remove("success");
 })
 
 
@@ -115,3 +118,7 @@ prevPageBtn.addEventListener("click", () => {
     }
 
 });
+
+function showNode(item) {
+    document.getElementById("nodeDropdown").innerHTML = item.innerHTML;
+};

@@ -83,11 +83,21 @@
 
 
 
+
           <!--search form-->
           <div class="my-5" id="search-container">
             <div class="container">
-              <div>
-                <h2><b>Search</b> an Appointment</h2>
+              <div class="d-flex justify-content-between">
+                <p class="h2"><b>Search</b> an Appointment</p>
+                  <div class="d-flex align-content-center">
+                    <p class="h2 me-2">Select <b>node</b>:</p>
+                    <button type="button" class="btn btn-secondary dropdown-toggle" id="nodeDropdown" data-bs-toggle="dropdown" aria-expanded="false">Node</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" onclick="showNode(this)" value="1">Node 1 (Master)</a></li>
+                        <li><a class="dropdown-item" onclick="showNode(this)" value="2">Node 2 (Slave)</a></li>
+                        <li><a class="dropdown-item" onclick="showNode(this)" value="3">Node 3 (Slave)</a></li>
+                    </ul>
+                </div>
               </div>
               <form id="Search-Form" class="p-2">
                 <div>
@@ -101,7 +111,6 @@
               <div class="container display-searched-appointment mt-3">
 
               </div>
-
             </div>
           </div>
 
@@ -119,6 +128,10 @@
                   <div><button type="button" class="btn btn-danger back">Back</button></div>
                 </div>
               </div>
+            </div>
+
+            <div class="show-insert-status m-0 p-2">
+
             </div>
 
             <div class="container switch">
@@ -179,7 +192,6 @@
               </div>
 
               <form id="addNewAppointment">
-
                 <div class="row mb-2">
                   <div class="col-md-6 p-1">
                     <div class="input-group form-floating">
@@ -309,6 +321,7 @@
 
           <!-- Template Main JS File -->
           <script defer src="/js/main.js"></script>
+          
 
 </body>
 
