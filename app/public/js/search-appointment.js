@@ -303,7 +303,8 @@ function editEventListener(button){
         let StartTimeSplit = [];
         let EndTimeSplit = [];
 
-        if (searchResults.QueueDate != null) {
+        if (searchResults.QueueDate != null) { 
+            // 01/23/2019, 8:34 PM
             const [datePart, timePart] = searchResults.QueueDate.split(' ');
             QueueDateSplit[0] = datePart.replace(',', '');
             QueueDateSplit[1] = timePart;
