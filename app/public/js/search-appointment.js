@@ -272,12 +272,14 @@ function editEventListener(button){
 
         const editAppointmentForm = document.getElementById('editAppointmentForm');
 
+        // Get edit form elements
         const regionElement = document.getElementById('app-region-edit');
         const hospitalNameElement = document.getElementById('app-hospitalname-edit');
         const statusElement = document.getElementById('app-status-edit');
         const methodElement = document.getElementById('app-method-edit');
         const typeElement = document.getElementById('app-type-edit');
 
+        // Date & time elements
         const date_queuedElement = document.getElementById('date_queued-edit');
         const time_queuedElement = document.getElementById('time_queued-edit');
         const queue_dateElement = document.getElementById('queue_date-edit');
@@ -289,13 +291,58 @@ function editEventListener(button){
 
         console.log(searchResults);
 
+        // Change form inputs' values to existing appointment's values
         hospitalNameElement.value = searchResults.hospitalname;
         regionElement.value = searchResults.MajorIsland;
         statusElement.value = searchResults.status;
         methodElement.value = searchResults.IsVirtual;
         typeElement.value = searchResults.type;
 
-        
+        let QueueDateSplit = [];
+        let TimeQueuedSplit = [];
+        let StartTimeSplit = [];
+        let EndTimeSplit = [];
+
+        if (searchResults.QueueDate != null) {
+            const [datePart, timePart] = searchResults.QueueDate.split(' ');
+            QueueDateSplit[0] = datePart.replace(',', '');
+            QueueDateSplit[1] = timePart;
+        }
+
+        if (searchResults.TimeQueued != null) {
+            const [datePart, timePart] = searchResults.TimeQueued.split(' ');
+            TimeQueuedSplit[0] = datePart.replace(',', '');
+            TimeQueuedSplit[1] = timePart;
+        }
+
+        if (searchResults.StartTime != null) {
+            const [datePart, timePart] = searchResults.StartTime.split(' ');
+            StartTimeSplit[0] = datePart.replace(',', '');
+            StartTimeSplit[1] = timePart;
+        }
+
+        if (searchResults.EndTime != null) {
+            const [datePart, timePart] = searchResults.EndTime.split(' ');
+            EndTimeSplit[0] = datePart.replace(',', '');
+            EndTimeSplit[1] = timePart;
+        }
+
+        date_queuedElement.value = TimeQueuedSplit[0];
+        time_queuedElement.value = TimeQueuedSplit[1];
+
+        queue_dateElement.value = QueueDateSplit[0];
+        queue_timeElement.value = QueueDateSplit[1];
+
+        start_dateElement.value = StartTimeSplit[0];
+        start_timeElement.value = StartTimeSplit[1];
+
+        end_dateElement.value = EndTimeSplit[0];
+        end_timeElement.value = EndTimeSplit[1];
+
+        console.log(TimeQueuedSplit);
+        console.log(QueueDateSplit);
+        console.log(StartTimeSplit);
+        console.log(EndTimeSplit);
 
         editAppointmentForm.addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -308,58 +355,17 @@ function editEventListener(button){
             const methodBoolean = method.toLowerCase() === 'Virtual' ? 1 : 0;
             const type = typeElement.value;
 
-            let QueueDateSplit = [];
-            let TimeQueuedSplit = [];
-            let StartTimeSplit = [];
-            let EndTimeSplit = [];
-            
-            if (searchResults.QueueDate != null) {
-                const [datePart, timePart] = searchResults.QueueDate.split(' ');
-                QueueDateSplit[0] = datePart.replace(',', '');
-                QueueDateSplit[1] = timePart;
-            }
-
-            if (searchResults.TimeQueued != null) {
-                const [datePart, timePart] = searchResults.TimeQueued.split(' ');
-                TimeQueuedSplit[0] = datePart.replace(',', '');
-                TimeQueuedSplit[1] = timePart;
-            }
-
-            if (searchResults.StartTime != null) {
-                const [datePart, timePart] = searchResults.StartTime.split(' ');
-                StartTimeSplit[0] = datePart.replace(',', '');
-                StartTimeSplit[1] = timePart;
-            }
-
-            if (searchResults.EndTime != null) {
-                const [datePart, timePart] = searchResults.EndTime.split(' ');
-                EndTimeSplit[0] = datePart.replace(',', '');
-                EndTimeSplit[1] = timePart;
-            }
-
-            console.log(TimeQueuedSplit);
-            console.log(QueueDateSplit);
-            console.log(StartTimeSplit);
-            console.log(EndTimeSplit);
-
-            date_queuedElement.value = TimeQueuedSplit[0];
-            time_queuedElement.value = TimeQueuedSplit[1];
-
-            queue_dateElement.value = QueueDateSplit[0];
-            queue_timeElement.value = QueueDateSplit[1];
-
-            start_dateElement.value = StartTimeSplit[0];
-            start_timeElement.value = StartTimeSplit[1];
-
-            end_dateElement.value = EndTimeSplit[0];
-            end_timeElement.value = EndTimeSplit[1];
-
+            // TODO: try
+            // const QueueDate = TimeQueuedSplit[0] + " " + TimeQueuedSplit[1];
             const QueueDate = date_queuedElement.value + " " + time_queuedElement.value;
             const TimeQueued = queue_dateElement.value + " " + queue_timeElement.value;
             const StartTime = start_dateElement.value + " " + start_timeElement.value;
             const EndTime = end_dateElement.value + " " + end_timeElement.value;
 
             console.log(QueueDate);
+            console.log(TimeQueued);
+            console.log(StartTime);
+            console.log(EndTime);
 
             const editFormData = {
                 apptid: apptid,
