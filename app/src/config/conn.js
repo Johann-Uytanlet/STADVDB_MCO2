@@ -219,9 +219,7 @@ async function logQuery(query, content, callback){
 
             //console.log(result);
             //return result;
-            return callback(null, result);
-    
-    
+            return callback(null, result);    
     
         } catch (err) {
             console.log("ERROR IN STORE QUERY: ")
