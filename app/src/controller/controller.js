@@ -246,7 +246,7 @@ const controller = {
                     console.log(err);
                 } else {
                     console.log(result);
-                    res.result = result;
+                    res.status(201).json(result);
                 }
             }
             );
@@ -303,32 +303,6 @@ const controller = {
             unique = res1.result[0][0].count
         }
 
-        // Convert Date objects to the desired format
-        // const formatDateTime = (datetime) => {
-        //     if (datetime instanceof Date) {
-        //         const year = datetime.getFullYear();
-        //         const month = String(datetime.getMonth() + 1).padStart(2, '0');
-        //         const day = String(datetime.getDate()).padStart(2, '0');
-        //         const hours = String(datetime.getHours()).padStart(2, '0');
-        //         const minutes = String(datetime.getMinutes()).padStart(2, '0');
-        //         const seconds = String(datetime.getSeconds()).padStart(2, '0');
-        //         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        //     } else {
-        //         return datetime;
-        //     }
-        // };
-
-        // console.log(TimeQueued);
-        // console.log(QueueDate);
-        // console.log(StartTime);
-        // console.log(EndTime);
-
-        // Format date and time fields
-        // const formattedTimeQueued = formatDateTime(TimeQueued);
-        // const formattedQueueDate = formatDateTime(QueueDate);
-        // const formattedStartTime = formatDateTime(StartTime);
-        // const formattedEndTime = formatDateTime(EndTime);
-
         const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
         await dbQuery(current_node, sql, apptid, (err, result) => {
@@ -382,7 +356,7 @@ const controller = {
         // console.log(appointment.length)
 
         if (appointment.length > 0) {
-            const sql = `DELETE FROM node0_db WHERE apptid = '${appointment[0].apptid}' FOR UPDATE;`;
+            const sql = `DELETE FROM node0_db WHERE apptid = '${appointment[0].apptid}';`;
 
             await dbQuery(current_node, sql, {}, (err, result) => {
                 if (err) {
@@ -403,7 +377,7 @@ const controller = {
         //     //console.log(res1.result[0][0].MajorIsland)
 
             if (appointment.MajorIsland == 'Luzon') {
-                const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}' FOR UPDATE;`;
+                const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}';`;
                 await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -417,7 +391,7 @@ const controller = {
                 }
                 );
             } else if (appointment.MajorIsland == 'Visayas' || appointment.MajorIsland == 'Mindanao') {
-                const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}' FOR UPDATE;`;
+                const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}';`;
                 await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);

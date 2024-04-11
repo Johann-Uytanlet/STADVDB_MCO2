@@ -21,18 +21,8 @@ searchSubmitBtn.addEventListener("click", (event) => {
     const notAllFoundMessage = document.querySelectorAll(".id-notfound");
 
     // RESET
-    if (getAllCurrentSearch != null) {
-        getAllCurrentSearch.forEach(element => {
-            element.remove();
-        });
-    }
-
-    if (notAllFoundMessage != null) {
-
-        notAllFoundMessage.forEach(element => {
-            element.remove();
-        });
-    }
+    displaySearchedAppointment.innerHTML = "";
+    displaySearchedAppointment.classList.remove("success");
 
     const appID = inputSearch.value;
 
@@ -149,7 +139,8 @@ function editEventListener(button){
                     <h2 class="mx-1 my-3 container-title">Edit <b>Appointment</b></h2>
                 </div>
                 <div>
-                    <div><button type="button" class="btn btn-danger add-new-edit">Back</button></div>
+                    <div><button type="button" onclick="document.querySelector('.editFormContainer').remove()" class="btn btn-danger add-new-edit">X</button></div>
+
                 </div>
             </div>
 
@@ -264,6 +255,8 @@ function editEventListener(button){
                     <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Edit Appointment</button>
                 </div>
 
+
+
             </form>
         </div>
         `;
@@ -288,8 +281,6 @@ function editEventListener(button){
         const start_timeElement = document.getElementById('start_time-edit');
         const end_dateElement = document.getElementById('end_date-edit');
         const end_timeElement = document.getElementById('end_time-edit');
-
-        console.log(searchResults);
 
         // Change form inputs' values to existing appointment's values
         hospitalNameElement.value = searchResults.hospitalname;
@@ -328,23 +319,34 @@ function editEventListener(button){
                 EndTime: EndTime,
             };
 
-            console.log(editFormData);
+            // console.log(editFormData);
 
             try {
                 await fetchPost('/updateAppointment', editFormData)
                     .then(response => {
                         if (response.status == 201) {
+                            console.log("Updated");
                             return response.json();
                         } else {
                             alert ('Error in updating appointment.');
                         }
                     })
+                    .then(data => {
+                        displaySearchedAppointment.innerHTML = "";
+                        displaySearchedAppointment.innerHTML += `<p>Successfully Updated the Appointment with id: ${editFormData.apptid} </p>`;
+                        displaySearchedAppointment.classList.add("success");
+                    })
             } catch (error) {
                 console.log(error);
             }
         });
+
     });
+
+
+
 }
+
 
 function deleteEventListener(button) {
     button.addEventListener("click", (event) => {
@@ -370,3 +372,4 @@ function deleteEventListener(button) {
         }
     });
 }
+
