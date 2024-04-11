@@ -359,6 +359,8 @@ function editEventListener(button){
             const StartTime = start_dateElement.value + " " + start_timeElement.value;
             const EndTime = end_dateElement.value + " " + end_timeElement.value;
 
+            console.log(QueueDate);
+
             const editFormData = {
                 apptid: apptid,
                 status: status,
@@ -367,10 +369,10 @@ function editEventListener(button){
                 type: type,
                 MajorIsland: region,
                 IsHospital: IsHospital,
-                QueueDate: null,
-                TimeQueued: null,
-                StartTime: null,
-                EndTime: null,
+                QueueDate: QueueDate,
+                TimeQueued: TimeQueued,
+                StartTime: StartTime,
+                EndTime: EndTime,
             };
 
             console.log(editFormData);
