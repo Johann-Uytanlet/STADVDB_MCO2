@@ -43,6 +43,18 @@ searchSubmitBtn.addEventListener("click", (event) => {
     }).then(data => {
         if (Object.keys(data).length > 0) {
             const result = data;
+            
+            console.log((result));
+
+            for(let key in result){
+                if (typeof result[key] === 'string' && result[key].endsWith('Z')) {
+                    // Convert the UTC timestamp to local time zone
+                    const utcTimestamp = new Date(result[key]);
+                    const localTimestamp = utcTimestamp.toLocaleString();
+                    // Replace the UTC timestamp with the local time zone string
+                    result[key] = localTimestamp;
+                }
+            }
             const html =
                 `
             <table class="table table-hover" id="display-section">

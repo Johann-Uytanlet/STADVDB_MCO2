@@ -42,8 +42,6 @@ viewBtn.addEventListener("click", () => {
 // Pages
 
 const prevPageBtn = document.getElementById("prevBtn");
-
-
 const nextPageBtn = document.getElementById("nextBtn");
 
 nextPageBtn.addEventListener("click", () => {

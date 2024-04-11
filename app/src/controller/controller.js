@@ -49,8 +49,7 @@ const controller = {
             console.log(req.query.page)
 
             if (req.query.page == null) {
-                pageNum = 1;
-                limit = pageNum * 10;
+                limit = 10;
 
                 sql = `SELECT * FROM node0_db LIMIT ${limit} FOR UPDATE;`;
 
@@ -62,11 +61,13 @@ const controller = {
                     }
                 });
 
+                console.log(viewPartialAppointments)
+
                 viewPartialAppointments.forEach(item => {
-                    if (item.TimeQueued !== null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
-                    if (item.QueueDate !== null) { item.QueueDate = item.QueueDate.toLocaleString(); }
-                    if (item.StartTime !== null) { item.StartTime = item.StartTime.toLocaleString(); }
-                    if (item.EndTime !== null) { item.EndTime = item.EndTime.toLocaleString(); }
+                    if (item.TimeQueued != null) { item.TimeQueued = item.TimeQueued.toLocaleString(); }
+                    if (item.QueueDate != null) { item.QueueDate = item.QueueDate.toLocaleString(); }
+                    if (item.StartTime != null) { item.StartTime = item.StartTime.toLocaleString(); }
+                    if (item.EndTime != null) { item.EndTime = item.EndTime.toLocaleString(); }
                 });
 
                 res.render('./index.ejs', { viewApp: viewPartialAppointments, avg_consultation_time: avg_consultation_time, avg_queue_time: avg_queue_time, completed: completed });
@@ -135,7 +136,9 @@ const controller = {
                 } else {
                     if (result[0].length > 0) {
                         const appointment = result[0];
+                        console.log(appointment[0].TimeQueued);
                         res.status(200).json(appointment[0]);
+                    
                     } else {
                         console.log("no")
                         res.status(200).json([]);
