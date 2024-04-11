@@ -24,7 +24,6 @@ searchSubmitBtn.addEventListener("click", (event) => {
         });
     }
 
-
     const appID = inputSearch.value;
 
     fetch('/getAppointment', {
@@ -37,7 +36,6 @@ searchSubmitBtn.addEventListener("click", (event) => {
         if (response.ok) {
             // Parse the JSON response
             return response.json();
-
         } else {
             // If the response is not successful, throw an error
             throw new Error('Failed to fetch appointment data');
@@ -233,7 +231,7 @@ function editEventListener(button){
             </div>
 
             <div class="container mt-3 text-center">
-                <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Submit</button>
+                <button type="submit" id="submitEditForm" class="btn btn-primary btn-md py-1 px-3">Edit Appointment</button>
             </div>
 
         </form>
@@ -258,12 +256,56 @@ function editEventListener(button){
         const end_dateElement = document.getElementById('end_date-edit');
         const end_timeElement = document.getElementById('end_time-edit');
 
+        console.log(searchResults);
+
+        hospitalNameElement.value = searchResults.hospitalname;
         regionElement.value = searchResults.MajorIsland;
-        hospitalNameElement.innerText = searchResults.hospitalname;
         statusElement.value = searchResults.status;
-        methodElement.value = searchResults.IsVirtual === 1 ? 'Virtual' : 'Face-to-Face';
+        methodElement.value = searchResults.IsVirtual;
         typeElement.value = searchResults.type;
 
+        let QueueDateSplit = [];
+        let TimeQueuedSplit = [];
+        let StartTimeSplit = [];
+        let EndTimeSplit = [];
+        
+        // Replace "Z" with an empty string for time parts
+        if (searchResults.QueueDate != null) {
+            const [datePart, timePart] = searchResults.QueueDate.split('T');
+            QueueDateSplit.push(datePart);
+            QueueDateSplit.push(timePart.replace('Z', '')); // Remove "Z"
+        }
+
+        if (searchResults.TimeQueued != null) {
+            const [datePart, timePart] = searchResults.TimeQueued.split('T');
+            TimeQueuedSplit[0] = datePart;
+            TimeQueuedSplit[1] = timePart.replace('Z', ''); // Remove "Z"
+        }
+
+        if (searchResults.StartTime != null) {
+            const [datePart, timePart] = searchResults.StartTime.split('T');
+            StartTimeSplit[0] = datePart;
+            StartTimeSplit[1] = timePart.replace('Z', ''); // Remove "Z"
+        }
+
+        if (searchResults.EndTime != null) {
+            const [datePart, timePart] = searchResults.EndTime.split('T');
+            EndTimeSplit[0] = datePart;
+            EndTimeSplit[1] = timePart.replace('Z', ''); // Remove "Z"
+        }
+
+
+        date_queuedElement.value = TimeQueuedSplit[0];
+        time_queuedElement.value = TimeQueuedSplit[1];
+
+        queue_dateElement.value = QueueDateSplit[0];
+        queue_timeElement.value = QueueDateSplit[1];
+
+        start_dateElement.value = StartTimeSplit[0];
+        start_timeElement.value = StartTimeSplit[1];
+
+        end_dateElement.value = EndTimeSplit[0];
+        end_timeElement.value = EndTimeSplit[1];
 
         // try {
         //     fetch('/updateAppointment', {

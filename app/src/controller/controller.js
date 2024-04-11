@@ -52,7 +52,7 @@ const controller = {
                 pageNum = 1;
                 limit = pageNum * 10;
 
-                sql = `SELECT * FROM node0_db LIMIT ${limit};`;
+                sql = `SELECT * FROM node0_db LIMIT ${limit} FOR UPDATE;`;
 
                 viewPartialAppointments = await dbQuery(current_node, sql, content, (err, result) => {
                     if (err) {
@@ -77,7 +77,7 @@ const controller = {
                 limit = 10;
                 offset = (pageNum - 1) * limit;
 
-                sql = `SELECT * FROM node0_db LIMIT ${limit} OFFSET ${offset};`;
+                sql = `SELECT * FROM node0_db LIMIT ${limit} OFFSET ${offset} FOR UPDATE;`;
 
                 viewPartialAppointments = await dbQuery(current_node, sql, content, (err, result) => {
                     if (err) {
@@ -111,7 +111,7 @@ const controller = {
     isApptidUnique: async (req, res) => {
         const apptid = req.body;
 
-        const sql = `SELECT COUNT(*) AS count FROM node0_db WHERE apptid = \'${apptid}\';`;
+        const sql = `SELECT COUNT(*) AS count FROM node0_db WHERE apptid = \'${apptid}\' FOR UPDATE;`;
 
         await dbQuery(current_node, sql, apptid, (err, result) => {
             if (err) {
@@ -127,7 +127,7 @@ const controller = {
         try {
             const apptid = req.body.apptid;
 
-            const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';`;
+            const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}' FOR UPDATE;`;
 
             await conn.dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
@@ -239,7 +239,7 @@ const controller = {
 
         if (res1.result[0].length > 0) {
 
-            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
           
             await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
@@ -255,7 +255,7 @@ const controller = {
             //console.log(res1.result[0][0].MajorIsland)
 
             if (res1.result[0][0].MajorIsland == 'Luzon') {
-                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
                 await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -269,7 +269,7 @@ const controller = {
                 }
                 );
             } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
-                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
 
                 await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
@@ -380,7 +380,7 @@ const controller = {
         // console.log(appointment.length)
 
         if (appointment.length > 0) {
-            const sql = `DELETE FROM node0_db WHERE apptid = '${appointment[0].apptid}';`;
+            const sql = `DELETE FROM node0_db WHERE apptid = '${appointment[0].apptid}' FOR UPDATE;`;
 
             await dbQuery(current_node, sql, {}, (err, result) => {
                 if (err) {
@@ -401,7 +401,7 @@ const controller = {
         //     //console.log(res1.result[0][0].MajorIsland)
 
             if (appointment.MajorIsland == 'Luzon') {
-                const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}';`;
+                const sql = `DELETE FROM node1_db WHERE apptid = '${apptid}' FOR UPDATE;`;
                 await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -415,7 +415,7 @@ const controller = {
                 }
                 );
             } else if (appointment.MajorIsland == 'Visayas' || appointment.MajorIsland == 'Mindanao') {
-                const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}';`;
+                const sql = `DELETE FROM node2_db WHERE apptid = '${apptid}' FOR UPDATE;`;
                 await dbQuery(current_node, sql, {}, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -432,7 +432,7 @@ const controller = {
         },
 
     avg_consultation_time: async (req, res) => {
-        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time FROM node0_db;`;
+        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time FROM node0_db FOR UPDATE;`;
 
         await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
@@ -445,7 +445,7 @@ const controller = {
     }, 
     
     avg_queue_time: async (req, res) => {
-        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time FROM node0_db;`;
+        const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time FROM node0_db FOR UPDATE;`;
 
         result = {}
         result2 = {}
@@ -462,7 +462,7 @@ const controller = {
     },
     
     completed_over_total: async (req, res) => {
-        var sql = `SELECT COUNT(*) as total FROM node0_db;`;
+        var sql = `SELECT COUNT(*) as total FROM node0_db FOR UPDATE;`;
         okay = false;
         okay2 = false;
 
@@ -480,7 +480,7 @@ const controller = {
             }
         }
         );
-        sql = `SELECT COUNT(*) as total FROM node0_db WHERE status = 'Complete';`;
+        sql = `SELECT COUNT(*) as total FROM node0_db WHERE status = 'Complete' FOR UPDATE;`;
         await dbQuery(current_node, sql, 'apptid', (err, result) => {
             if (err) {
                 console.log(err);

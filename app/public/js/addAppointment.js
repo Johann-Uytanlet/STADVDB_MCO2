@@ -96,6 +96,8 @@ function getAppointtmentFormData() {
     let QueueDate = "";
     QueueDate += queue_date + " " + queue_time;
 
+    console.log(queue_date, queue_time);
+
     // START TIME
     const start_date = start_dateElement.value;
     const start_time = start_timeElement.value;
@@ -121,6 +123,8 @@ function getAppointtmentFormData() {
         StartTime: StartTime,
         EndTime: EndTime,
     };
+
+    console.log(formData);
 
     return formData;
 };
