@@ -32,7 +32,7 @@ function performQuery(connection, isolationLevel) {
             }
 
             // Perform the SELECT query
-            connection.query("SELECT * FROM node2_db WHERE apptid = '5F04266409AD193A648175E825482967'", (err, results) => {
+            connection.query("SELECT * FROM node2_db WHERE apptid = '5F04266409AD193A648175E825482967' FOR UPDATE", (err, results) => {
                 if (err) {
                     reject(err);
                 } else {
