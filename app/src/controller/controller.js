@@ -310,27 +310,32 @@ const controller = {
         }
 
         // Convert Date objects to the desired format
-        const formatDateTime = (datetime) => {
-            if (datetime instanceof Date) {
-                const year = datetime.getFullYear();
-                const month = String(datetime.getMonth() + 1).padStart(2, '0');
-                const day = String(datetime.getDate()).padStart(2, '0');
-                const hours = String(datetime.getHours()).padStart(2, '0');
-                const minutes = String(datetime.getMinutes()).padStart(2, '0');
-                const seconds = String(datetime.getSeconds()).padStart(2, '0');
-                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            } else {
-                return datetime;
-            }
-        };
+        // const formatDateTime = (datetime) => {
+        //     if (datetime instanceof Date) {
+        //         const year = datetime.getFullYear();
+        //         const month = String(datetime.getMonth() + 1).padStart(2, '0');
+        //         const day = String(datetime.getDate()).padStart(2, '0');
+        //         const hours = String(datetime.getHours()).padStart(2, '0');
+        //         const minutes = String(datetime.getMinutes()).padStart(2, '0');
+        //         const seconds = String(datetime.getSeconds()).padStart(2, '0');
+        //         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        //     } else {
+        //         return datetime;
+        //     }
+        // };
+
+        // console.log(TimeQueued);
+        // console.log(QueueDate);
+        // console.log(StartTime);
+        // console.log(EndTime);
 
         // Format date and time fields
-        const formattedTimeQueued = formatDateTime(TimeQueued);
-        const formattedQueueDate = formatDateTime(QueueDate);
-        const formattedStartTime = formatDateTime(StartTime);
-        const formattedEndTime = formatDateTime(EndTime);
+        // const formattedTimeQueued = formatDateTime(TimeQueued);
+        // const formattedQueueDate = formatDateTime(QueueDate);
+        // const formattedStartTime = formatDateTime(StartTime);
+        // const formattedEndTime = formatDateTime(EndTime);
 
-        const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+        const sql = `INSERT INTO node0_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
         await dbQuery(current_node, sql, apptid, (err, result) => {
             if (err) {
@@ -343,7 +348,7 @@ const controller = {
 
         if (MajorIsland == 'Luzon') {
 
-            const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+            const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
             await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
@@ -358,7 +363,7 @@ const controller = {
 
         } else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
 
-            const sql = `INSERT INTO node2_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)VALUES (\'${apptid}\', \'${status}\', \'${formattedTimeQueued}\', \'${formattedQueueDate}\', \'${formattedStartTime}\', \'${formattedEndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+            const sql = `INSERT INTO node2_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
             await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
