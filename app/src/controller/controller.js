@@ -198,34 +198,30 @@ const controller = {
     updateAppointment: async (req, res) => {
         // Build the SET clause dynamically, ensuring valid fields and data types
         data = req.body
-        apptid = req.id
+        apptid = req.body.apptid
+
         let setClause = "";
         const values = [];
+
         for (const key in data) {
             if (
                 Object.values(data).length > 0 &&
-                !key.includes(" ") &&
-                ["status", "TimeQueued", "QueueDate", "StartTime", "EndTime", "type", "IsVirtual", "hospitalname", "IsHospital"].includes(key)
+                !key.includes(" ") && ["status", "TimeQueued", "QueueDate", "StartTime", "EndTime", "type", "IsVirtual", "hospitalname", "IsHospital", "MajorIsland"].includes(key)
             ) {
-                // Enclose string values in single quotes for proper escaping and apostrophe handling
                 if (typeof data[key] === "string") {
-                    // console.log("Trial"); trouble shooint
                     setClause += `${key} = \'${data[key]}\',`;
-                    //setClause += `${key} = ?,`;
-                    //values.push(`${data[key]}`); // Add single quotes around strings
                 } else if (data[key] instanceof Date) {
                     const year = data[key].getFullYear();
                     const month = String(data[key].getMonth() + 1).padStart(2, '0'); // Add leading zero for single-digit months
                     const day = String(data[key].getDate()).padStart(2, '0'); // Add leading zero for single-digit days
                     const hours = String(data[key].getHours()).padStart(2, '0'); // Add leading zero for single-digit hours
                     const minutes = String(data[key].getMinutes()).padStart(2, '0'); // Add leading zero for single-digit minutes
-
                     const dateString = `${year}-${month}-${day} ${hours}:${minutes}:00`; // Add seconds as 00 (if not required)
-                    setClause += `${key} = ?,`;
-                    values.push(dateString);
+                    setClause += `${key} = ${dateString},`;
+                    //values.push(dateString);
                 } else {
-                    setClause += `${key} = ?,`;
-                    values.push(data[key]); // Handle dates
+                    setClause += `${key} = ${data[key]},`;
+                    //values.push(data[key]); // Handle dates
                 }
             } else {
                 console.warn(`Invalid field or data type: ${key}`);
@@ -235,14 +231,15 @@ const controller = {
         // Remove trailing comma from SET clause if any
         setClause = setClause.slice(0, -1);
 
-        // Build the SQL query using parameterized queries for security
-        req1 = { body: apptid }
-        res1 = {}
-        await controller.searchAppointment(req1, res1);
+        // console.log(setClause);
 
-        if (res1.result[0].length > 0) {
+        const current_appointment = await helper.searchById(apptid);
 
-            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
+        if (current_appointment != null) {
+
+            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+
+            console.log(sql);
           
             await dbQuery(current_node, sql, apptid, (err, result) => {
                 if (err) {
@@ -254,11 +251,8 @@ const controller = {
             }
             );
 
-            //console.log("before")
-            //console.log(res1.result[0][0].MajorIsland)
-
-            if (res1.result[0][0].MajorIsland == 'Luzon') {
-                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
+            if (data.region == 'Luzon') {
+                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
                 await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
@@ -271,8 +265,8 @@ const controller = {
                     }
                 }
                 );
-            } else if (res1.result[0][0].MajorIsland == 'Visayas' || res1.result[0][0].MajorIsland == 'Mindanao') {
-                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\' FOR UPDATE;`;
+            } else if (data.region == 'Visayas' || data.region == 'Mindanao') {
+                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
 
                 await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {

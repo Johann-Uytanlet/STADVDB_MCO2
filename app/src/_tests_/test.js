@@ -27,13 +27,11 @@ async function main(){
 
     // testing update
 
-    /*
-    req.id = '00004590E197EAB7F2B92C3801607A7A' 
-    req.body = {status: 'Complete', type: 'Consultation'};
+    //req.id = '00025C50655A0FFB17C1B6DE333FC408' 
+    req.body = {apptid: '00025C50655A0FFB17C1B6DE333FC408', status: 'Complete', type: 'Consultation', hospitalname: 'apptid hospital', IsHospital: 1};
 
     await controller.updateAppointment(req, res);
     console.log(res);
-    */
     
     // is appidunique test
 
@@ -65,11 +63,11 @@ async function main(){
     
 
     // testing delete
-    req = {body: '73ED5F3C948786826AE26A446D12A727'};
-    res = {};
-    await controller.deleteNodeDB(req, res);
-    try{console.log(res.result[0].affectedRows);}
-    catch{console.log("NOOOO");}
+    // req = {body: '73ED5F3C948786826AE26A446D12A727'};
+    // res = {};
+    // await controller.deleteNodeDB(req, res);
+    // try{console.log(res.result[0].affectedRows);}
+    // catch{console.log("NOOOO");}
     
 
 

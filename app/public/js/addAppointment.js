@@ -72,7 +72,6 @@ addAppointmentForm.addEventListener('submit', async function (e) {
 
 });
 
-
 function getAppointtmentFormData() {
 
     const region = regionElement.value;

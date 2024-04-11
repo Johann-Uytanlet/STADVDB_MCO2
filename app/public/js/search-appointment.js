@@ -5,6 +5,16 @@ const displaySearchedAppointment = document.querySelector(".display-searched-app
 
 let searchResults = {};
 
+async function fetchPost(endpoint, formData) {
+    let response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    }).then();
+
+    return response;
+};
+
 searchSubmitBtn.addEventListener("click", (event) => {
     event.preventDefault();
     const getAllCurrentSearch = document.querySelectorAll("#display-section");
@@ -127,9 +137,6 @@ searchSubmitBtn.addEventListener("click", (event) => {
 })
 
 function editEventListener(button){
-
-    // get table 
-
     button.addEventListener("click", (e) => {
         e.preventDefault();
 
@@ -150,7 +157,7 @@ function editEventListener(button){
                 <div class="row mb-2">
                     <div class="col-md-6 p-1">
                         <div class="input-group form-floating">
-                        <input type="text" class="form-control" id="app-hospitalname-edit" placeholder="Makati Medical Center">
+                            <input type="text" class="form-control" id="app-hospitalname-edit" placeholder="Makati Medical Center">
                         <label for="app-hospitalname">Hospital Name</label>
                         </div>
                     </div>
@@ -260,16 +267,8 @@ function editEventListener(button){
             </form>
         </div>
         `;
-
+        
         displaySearchedAppointment.innerHTML += editFormHTML;
-
-        const editAppointmentContainer = document.getElementById('editFormContainer');
-
-        const backButton = document.querySelector('.add-new-edit');
-
-        backButton.addEventListener('click', () => {
-            editAppointmentContainer.style.display = 'none'; // Hide the container
-        });
 
         const editAppointmentForm = document.getElementById('editAppointmentForm');
 
@@ -296,63 +295,99 @@ function editEventListener(button){
         methodElement.value = searchResults.IsVirtual;
         typeElement.value = searchResults.type;
 
-        let QueueDateSplit = [];
-        let TimeQueuedSplit = [];
-        let StartTimeSplit = [];
-        let EndTimeSplit = [];
         
-        // Replace "Z" with an empty string for time parts
-        if (searchResults.QueueDate != null) {
-            const [datePart, timePart] = searchResults.QueueDate.split('T');
-            QueueDateSplit.push(datePart);
-            QueueDateSplit.push(timePart.replace('Z', '')); // Remove "Z"
-        }
 
-        if (searchResults.TimeQueued != null) {
-            const [datePart, timePart] = searchResults.TimeQueued.split('T');
-            TimeQueuedSplit[0] = datePart;
-            TimeQueuedSplit[1] = timePart.replace('Z', ''); // Remove "Z"
-        }
+        editAppointmentForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-        if (searchResults.StartTime != null) {
-            const [datePart, timePart] = searchResults.StartTime.split('T');
-            StartTimeSplit[0] = datePart;
-            StartTimeSplit[1] = timePart.replace('Z', ''); // Remove "Z"
-        }
+            const region = regionElement.value;
+            const status = statusElement.value;
+            const hospitalname = hospitalNameElement.value;
+            const IsHospital = hospitalname.trim() === '' ? 0 : 1;
+            const method = methodElement.value;
+            const methodBoolean = method.toLowerCase() === 'Virtual' ? 1 : 0;
+            const type = typeElement.value;
 
-        if (searchResults.EndTime != null) {
-            const [datePart, timePart] = searchResults.EndTime.split('T');
-            EndTimeSplit[0] = datePart;
-            EndTimeSplit[1] = timePart.replace('Z', ''); // Remove "Z"
-        }
+            let QueueDateSplit = [];
+            let TimeQueuedSplit = [];
+            let StartTimeSplit = [];
+            let EndTimeSplit = [];
+            
+            if (searchResults.QueueDate != null) {
+                const [datePart, timePart] = searchResults.QueueDate.split(' ');
+                QueueDateSplit[0] = datePart.replace(',', '');
+                QueueDateSplit[1] = timePart;
+            }
 
+            if (searchResults.TimeQueued != null) {
+                const [datePart, timePart] = searchResults.TimeQueued.split(' ');
+                TimeQueuedSplit[0] = datePart.replace(',', '');
+                TimeQueuedSplit[1] = timePart;
+            }
 
-        date_queuedElement.value = TimeQueuedSplit[0];
-        time_queuedElement.value = TimeQueuedSplit[1];
+            if (searchResults.StartTime != null) {
+                const [datePart, timePart] = searchResults.StartTime.split(' ');
+                StartTimeSplit[0] = datePart.replace(',', '');
+                StartTimeSplit[1] = timePart;
+            }
 
-        queue_dateElement.value = QueueDateSplit[0];
-        queue_timeElement.value = QueueDateSplit[1];
+            if (searchResults.EndTime != null) {
+                const [datePart, timePart] = searchResults.EndTime.split(' ');
+                EndTimeSplit[0] = datePart.replace(',', '');
+                EndTimeSplit[1] = timePart;
+            }
 
-        start_dateElement.value = StartTimeSplit[0];
-        start_timeElement.value = StartTimeSplit[1];
+            console.log(TimeQueuedSplit);
+            console.log(QueueDateSplit);
+            console.log(StartTimeSplit);
+            console.log(EndTimeSplit);
 
-        end_dateElement.value = EndTimeSplit[0];
-        end_timeElement.value = EndTimeSplit[1];
+            date_queuedElement.value = TimeQueuedSplit[0];
+            time_queuedElement.value = TimeQueuedSplit[1];
 
-        // try {
-        //     fetch('/updateAppointment', {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application.json",
-        //         },
-        //         body: JSON.stringify({ apptid: apptid })
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => console.log(data))
-        //     .catch(error => console.log(error));
-        // } catch (error) {
-        //     console.log(error);
-        // }
+            queue_dateElement.value = QueueDateSplit[0];
+            queue_timeElement.value = QueueDateSplit[1];
+
+            start_dateElement.value = StartTimeSplit[0];
+            start_timeElement.value = StartTimeSplit[1];
+
+            end_dateElement.value = EndTimeSplit[0];
+            end_timeElement.value = EndTimeSplit[1];
+
+            const QueueDate = date_queuedElement.value + " " + time_queuedElement.value;
+            const TimeQueued = queue_dateElement.value + " " + queue_timeElement.value;
+            const StartTime = start_dateElement.value + " " + start_timeElement.value;
+            const EndTime = end_dateElement.value + " " + end_timeElement.value;
+
+            const editFormData = {
+                apptid: apptid,
+                status: status,
+                hospitalname: hospitalname,
+                IsVirtual: methodBoolean,
+                type: type,
+                MajorIsland: region,
+                IsHospital: IsHospital,
+                QueueDate: null,
+                TimeQueued: null,
+                StartTime: null,
+                EndTime: null,
+            };
+
+            console.log(editFormData);
+
+            try {
+                await fetchPost('/updateAppointment', editFormData)
+                    .then(response => {
+                        if (response.status == 201) {
+                            return response.json();
+                        } else {
+                            alert ('Error in updating appointment.');
+                        }
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        });
     });
 }
 
