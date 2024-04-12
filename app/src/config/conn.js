@@ -4,10 +4,10 @@ const dotenv = require("dotenv").config({path: './conn.env'});
 // let host, user, password, database, port = [];
 
 // For now, now_num is hardcoded here. It determines which node the current user is on.
-const node_num = 0;
+const conn_num = 0;
 
-function switchConnection (node_num) {
-    switch (node_num) {
+function switchConnection (conn_num) {
+    switch (conn_num) {
         case 0:
             node_host = 'ccscloud.dlsu.edu.ph';
             node_user = 'root';
@@ -45,7 +45,7 @@ function switchConnection (node_num) {
 
 
 
-switchConnection(node_num);
+switchConnection(conn_num);
 
 const current_node = mysql.createPool({
     host: node_host,
@@ -289,4 +289,4 @@ function gracefulShutdown (pool) {
 //getConnection(node_1);
 //getConnection(node_2)
 
-module.exports = { current_node, node_0, node_1, node_2, dbQuery, getConnection };
+module.exports = {conn_num, current_node, node_0, node_1, node_2, dbQuery, getConnection };

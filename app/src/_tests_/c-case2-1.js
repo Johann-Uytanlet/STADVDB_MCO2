@@ -73,7 +73,7 @@ Promise.all([
     var connection0 = createConnection(connectionConfig0, "READ COMMITTED");
     var connection2 = createConnection(connectionConfig2, "READ COMMITTED");
     
-    var updateQuery = `UPDATE node1_db SET status = 'Complete' WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5'`;
+    var updateQuery = `UPDATE node1_db SET status = 'Queries' WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5'`;
     var readQuery = `SELECT * FROM node1_db WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5' FOR UPDATE`;
     
     
