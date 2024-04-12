@@ -22,8 +22,7 @@ const helper = {
     async searchById(id) {
     const apptid = id;
 
-    const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';
-        `;
+    const sql = `SELECT * FROM node0_db WHERE apptid = '${apptid}';`;
         
     const res = await conn.dbQuery(current_node, sql, apptid, (err, result) => {
         if (err) {

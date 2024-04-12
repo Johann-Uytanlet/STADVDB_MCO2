@@ -19,6 +19,12 @@ searchSubmitBtn.addEventListener("click", (event) => {
     event.preventDefault();
     const getAllCurrentSearch = document.querySelectorAll("#display-section");
     const notAllFoundMessage = document.querySelectorAll(".id-notfound");
+    const dropDownValue = document.querySelector("#nodeDropdown");
+    let buttonText = dropDownValue.textContent;
+
+    let current_node =  selectNode(buttonText);
+
+    // console.log(current_node);
 
     // RESET
     displaySearchedAppointment.innerHTML = "";
@@ -31,7 +37,7 @@ searchSubmitBtn.addEventListener("click", (event) => {
         headers: {
             'Content-Type': "application/json",
         },
-        body: JSON.stringify({ apptid: appID })
+        body: JSON.stringify({ apptid: appID, nodeNum: current_node})
     }).then(response => {
         if (response.ok) {
             // Parse the JSON response
@@ -373,3 +379,18 @@ function deleteEventListener(button) {
     });
 }
 
+function selectNode(buttonText) {
+    let current_node;
+
+    if (buttonText === 'Node 1 (Master)') {
+        current_node = 0;
+    } else if (buttonText === 'Node 2 (Slave)') {
+        current_node = 1;
+    } else if (buttonText === 'Node 3 (Slave)') {
+        current_node = 2;
+    } else {
+        current_node = -1; 
+    }
+
+    return current_node;
+};
