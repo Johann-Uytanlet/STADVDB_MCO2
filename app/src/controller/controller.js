@@ -450,6 +450,53 @@ const controller = {
         }
     },
 
+    recoverFromLogs: async (req, res) => {
+        start = req.start;
+
+        okay = false;
+        var queries;
+
+        const sql = `SELECT statement FROM mco2.appointment_logs WHERE date_log > '${start}'`;
+
+        await dbQuery(node_0, sql, 'apptid', (err, result) => {
+            if (err) {
+                console.log(err);
+                console.log("Searching for appoitnment logs error");
+                //console.log("inside");
+            } else {
+                //console.log(result);
+                console.log("found logs");
+
+                res.result = result[0];
+                queries = result[0];
+                okay = true;
+
+                console.log(queries);
+            }
+        });
+        console.log("before okay");
+
+        if(okay){
+            console.log("In okay");
+            //console.log(queries[0].statement);
+            for (x in queries) {
+                //console.log("query");
+                //console.log(queries[x].statement);
+
+                await dbQuery(node_0, queries[x].statement, 'apptid', (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        //console.log("Searching for appoitnment logs error");
+                        //console.log("inside");
+                    } else {
+                        //console.log(result);
+                        console.log("logged");
+                    }
+                });
+            }
+        }
+    }
+
 
 
 };
