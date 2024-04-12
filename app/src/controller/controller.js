@@ -262,6 +262,8 @@ const controller = {
                 }
                 );
             }
+        } else {
+            console.log("Cannot do UPDATE in Slave Node");
         }
         // }
     },
@@ -323,7 +325,7 @@ const controller = {
             });
         }
         } else {
-            console.log("Server" + conn_num + " cannot do write process")
+            console.log("Slave Node " + conn_num + " cannot do write process")
         }
     },
 
@@ -368,6 +370,8 @@ const controller = {
                 }
                 );
             }
+        } else {
+            console.log("Cannot do DELETE in Slave Node");
         }
         },
 
