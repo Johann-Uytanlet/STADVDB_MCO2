@@ -4,7 +4,7 @@ const dotenv = require("dotenv").config({path: './conn.env'});
 // let host, user, password, database, port = [];
 
 // For now, now_num is hardcoded here. It determines which node the current user is on.
-const conn_num = 2;
+const conn_num = 0;
 
 function switchConnection (conn_num) {
     switch (conn_num) {

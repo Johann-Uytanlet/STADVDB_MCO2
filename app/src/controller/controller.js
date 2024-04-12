@@ -1,4 +1,4 @@
-const {conn_num, current_node, node_0, node_1, node_2, dbQuery, getConnection } = require('../config/conn.js');
+const { conn_num, current_node, node_0, node_1, node_2, dbQuery, getConnection } = require('../config/conn.js');
 const helper = require("./helper.js");
 
 // TODO: Replace the if-else statements in the (err, result) anonymous functions to respond with the appropriate status codes and data.
@@ -99,7 +99,7 @@ const controller = {
 
                 console.log(viewPartialAppointments);
 
-                res.status(201).json({ viewApp: viewPartialAppointments});
+                res.status(201).json({ viewApp: viewPartialAppointments });
             }
             console.log(pageNum);
         }
@@ -163,7 +163,7 @@ const controller = {
                         const appointment = result[0];
                         console.log(appointment[0].TimeQueued);
                         res.status(200).json(appointment[0]);
-                    
+
                     } else {
                         console.log("no")
                         res.status(200).json([]);
@@ -219,52 +219,54 @@ const controller = {
 
         if (current_appointment != null) {
 
-            if (conn_num == 0){
-            const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+            if (conn_num == 0) {
+                const sql = `UPDATE node0_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
 
-            console.log(sql);
-          
-            await dbQuery(current_node, sql, apptid, (err, result) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log(result);
-                    console.log("Update in Table 0");
-                    res.status(201).json(result);
-                }
-            }
-            );
-            }
-
-            if (data.region == 'Luzon') {
-                const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
-                await dbQuery(current_node, sql, apptid, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        //console.log("inside");
-                    } else {
-                        console.log(result);
-                        console.log("Update in Table 1");
-                    }
-                }
-                );
-            } else if (data.region == 'Visayas' || data.region == 'Mindanao') {
-                const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+                console.log(sql);
 
                 await dbQuery(current_node, sql, apptid, (err, result) => {
                     if (err) {
                         console.log(err);
-                        //console.log("inside");
                     } else {
                         console.log(result);
-                        console.log("Update in Table 2");
+                        console.log("Update in Table 0");
+                        res.status(201).json(result);
                     }
                 }
                 );
+
+
+                if (data.MajorIsland == 'Luzon') {
+                    const sql = `UPDATE node1_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+                    await dbQuery(current_node, sql, apptid, (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            //console.log("inside");
+                        } else {
+                            console.log(result);
+                            console.log("Update in Table 1");
+                        }
+                    }
+                    );
+                } else if (data.MajorIsland == 'Visayas' || data.MajorIsland == 'Mindanao') {
+                    const sql = `UPDATE node2_db SET ${setClause} WHERE apptid = \'${apptid}\';`;
+
+                    await dbQuery(current_node, sql, apptid, (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            //console.log("inside");
+                        } else {
+                            console.log(result);
+                            console.log("Update in Table 2");
+                        }
+                    }
+                    );
+                }
+            } else {
+                console.log("Cannot do UPDATE in Slave Node");
             }
-        } else {
-            console.log("Cannot do UPDATE in Slave Node");
         }
+
         // }
     },
 
@@ -287,43 +289,43 @@ const controller = {
             unique = res1.result[0][0].count
         }
 
-        if (conn_num == 0){
-        const sql = `INSERT INTO node${conn_num}_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+        if (conn_num == 0) {
+            const sql = `INSERT INTO node${conn_num}_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
 
-        await dbQuery(current_node, sql, apptid, (err, result) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Insert in Table 0");
-                return res.status(201).json({ message: "Appointment created", apptid: apptid });
+            await dbQuery(current_node, sql, apptid, (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Insert in Table 0");
+                    return res.status(201).json({ message: "Appointment created", apptid: apptid });
+                }
+            });
+
+            if (MajorIsland == 'Luzon') {
+
+                const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+
+                await dbQuery(current_node, sql, apptid, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Luzon: Insert in Table 1");
+                    }
+                });
+
+            } else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
+
+                const sql = `INSERT INTO node2_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
+
+                await dbQuery(current_node, sql, apptid, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Visayas/Mindanao: Insert in Table 2");
+
+                    }
+                });
             }
-        });
-
-        if (MajorIsland == 'Luzon') {
-
-            const sql = `INSERT INTO node1_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital) VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
-
-            await dbQuery(current_node, sql, apptid, (err, result) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Luzon: Insert in Table 1");
-                }
-            });
-
-        } else if (MajorIsland == 'Visayas' || MajorIsland == 'Mindanao') {
-
-            const sql = `INSERT INTO node2_db (apptid, status, TimeQueued, QueueDate, StartTime, EndTime, type, IsVirtual, MajorIsland, hospitalname, IsHospital)VALUES (\'${apptid}\', \'${status}\', \'${TimeQueued}\', \'${QueueDate}\', \'${StartTime}\', \'${EndTime}\', \'${type}\', ${IsVirtual}, \'${MajorIsland}\', \'${hospitalname}\', ${IsHospital});`;
-
-            await dbQuery(current_node, sql, apptid, (err, result) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Visayas/Mindanao: Insert in Table 2");
-
-                }
-            });
-        }
         } else {
             console.log("Slave Node " + conn_num + " cannot do write process")
         }
@@ -334,8 +336,8 @@ const controller = {
         const apptid = req.body;
 
         const appointment = await helper.searchById(apptid.apptid);
-                
-        if(conn_num == 0) {
+
+        if (conn_num == 0) {
             if (appointment.length > 0) {
                 const sql = `DELETE FROM node${conn_num}_db WHERE apptid = '${appointment[0].apptid}';`;
 
@@ -373,7 +375,7 @@ const controller = {
         } else {
             console.log("Cannot do DELETE in Slave Node");
         }
-        },
+    },
 
     avg_consultation_time: async (req, res) => {
         const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, StartTime, EndTime)) AS avg_consultation_time FROM node${conn_num}_db FOR UPDATE;`;
@@ -386,8 +388,8 @@ const controller = {
             }
         }
         );
-    }, 
-    
+    },
+
     avg_queue_time: async (req, res) => {
         const sql = `SELECT AVG(TIMESTAMPDIFF(HOUR, TimeQueued, QueueDate)) AS avg_queue_time FROM node${conn_num}_db FOR UPDATE;`;
 
@@ -404,7 +406,7 @@ const controller = {
         }
         );
     },
-    
+
     completed_over_total: async (req, res) => {
         var sql = `SELECT COUNT(*) as total FROM node${conn_num}_db FOR UPDATE;`;
         okay = false;
@@ -448,7 +450,7 @@ const controller = {
         }
     },
 
-    
+
 
 };
 
