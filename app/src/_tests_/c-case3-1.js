@@ -17,9 +17,19 @@ const connectionConfig2 = {
     port: 20025
 };
 
+function createConnection(connectionConfig, isolationLevel) {
+    const connection = mysql.createConnection(connectionConfig);
+    // Set isolation level
+    connection.query(`SET TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+    return connection;
+}
+
 // Create connections
-const connection0 = mysql.createConnection(connectionConfig0);
-const connection2 = mysql.createConnection(connectionConfig2);
+const connection0 = createConnection(connectionConfig0, "READ COMMITTED");
+// READ UNCOMMITTED
+// READ COMMITTED
+// REPEATABLE READ
+// SERIALIZABLE
 
 // Function to perform the query on a connection and return a promise with the results
 function performQuery(connection, sqlQuery) {
@@ -35,8 +45,8 @@ function performQuery(connection, sqlQuery) {
 }
 
 // Perform update operation on connection0 and read operation on connection2 concurrently
-const updateQuery = `UPDATE node0_db SET status = 'G' WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5'`;
-const updateQuery2 = `UPDATE node0_db SET status = 'H' WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5'`;
+const updateQuery = `UPDATE node0_db SET status = 'A' WHERE apptid = 'FFFCBD24B41CC2A68B770710251501E1'`;
+const updateQuery2 = `UPDATE node0_db SET status = 'B' WHERE apptid = 'FFFCBD24B41CC2A68B770710251501E1'`;
 Promise.all([
     performQuery(connection0, updateQuery),
     performQuery(connection0, updateQuery2)
@@ -46,7 +56,7 @@ Promise.all([
         console.log("Update2 results:", updateResults2);
 
         // Search query to check for the updated status
-        const searchQuery = `SELECT * FROM node0_db WHERE apptid = '0003F18CD0265CC90DD2D530B4D511F5' FOR UPDATE`;
+        const searchQuery = `SELECT * FROM node0_db WHERE apptid = 'FFFCBD24B41CC2A68B770710251501E1' FOR UPDATE`;
         performQuery(connection0, searchQuery)
         .then(searchResults => {
         console.log("Search results (after updates):", searchResults);
@@ -61,5 +71,5 @@ Promise.all([
     .finally(() => {
         // Close the connections after all queries are executed
         connection0.end();
-        connection2.end();
+        //connection2.end();
     });
